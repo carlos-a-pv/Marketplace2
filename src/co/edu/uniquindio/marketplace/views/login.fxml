@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.marketplace.controllers.">
    <children>
       <VBox alignment="CENTER" blendMode="DARKEN" depthTest="ENABLE" layoutX="153.0" layoutY="54.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="309.0" prefWidth="282.0" spacing="15.0">
          <children>
@@ -23,13 +22,13 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <TextField />
+            <TextField alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" />
             <Label contentDisplay="CENTER" text="PASSWORD">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <TextField />
+            <TextField nodeOrientation="LEFT_TO_RIGHT" onAction="#onLoginClick" />
             <Button mnemonicParsing="false" text="LOGIN">
                <font>
                   <Font name="System Bold" size="14.0" />
