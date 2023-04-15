@@ -19,13 +19,9 @@ public class LoginViewController {
 
     ModelFactoryController modelFactoryController;
     @FXML
-    private TextField tfUser;
+    private javafx.scene.control.TextField tfUser;
     @FXML
-    private TextField tfPassword;
-    @FXML
-    private Button btnLogin;
-    @FXML
-    private Label result;
+    private javafx.scene.control.TextField tfPassword;
 
     @FXML
     void initialize() {
@@ -36,8 +32,8 @@ public class LoginViewController {
         String user = tfUser.getText();
         String password = tfPassword.getText();
 
-        //2. Validar la información
         if (datosValidos(user, password) == true){
+        //2. Validar la información
             Empleado empleadoIniciado = modelFactoryController.marketplace.autenticar(user, password);
 
             if (empleadoIniciado instanceof Administrador){
@@ -52,22 +48,18 @@ public class LoginViewController {
             }else{
                 tfUser.setText("");
                 tfPassword.setText("");
-                result.setText("CREDENCIALES INCORRECTAS");
             }
         }
     }
 
     private boolean datosValidos(String user, String password) {
-
         String mensaje = "";
-
 
         if(user == null || user.equals(""))
             mensaje += "El usuario es invalido \n" ;
 
         if(password == null || password.equals(""))
             mensaje += "La contraseña es invalida \n" ;
-
 
         if(mensaje.equals("")){
             return true;
