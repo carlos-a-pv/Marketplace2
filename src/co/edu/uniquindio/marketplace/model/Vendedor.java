@@ -14,7 +14,4 @@ public class Vendedor extends Empleado{
          this.direccion = direccion;
      }
 
-     public Usuario getUser(){
-        return this.getUser();
-     }
 }
