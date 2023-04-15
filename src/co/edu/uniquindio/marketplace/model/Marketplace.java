@@ -1,5 +1,7 @@
 package co.edu.uniquindio.marketplace.model;
 
+import co.edu.uniquindio.marketplace.exceptions.InicioSesionException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class Marketplace {
 
     }*/
 
-    public Empleado autenticar (String email, String password){
+    public Empleado autenticar (String email, String password) throws InicioSesionException {
         Vendedor vendedor= vendedores.stream()
                 .filter( (vende)-> vende.getUser().getNombre().equals(email) && vende.getUser().getPassword().equals(password))
                 .findFirst()
@@ -27,8 +29,10 @@ public class Marketplace {
             return vendedor;
         }
         else {
-            return null;
+            throw new InicioSesionException("El empleado con cedula: "+email+" no existe");
         }
 
     }
+
+
 }

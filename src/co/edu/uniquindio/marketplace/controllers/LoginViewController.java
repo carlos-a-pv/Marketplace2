@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -22,6 +23,8 @@ public class LoginViewController {
     private javafx.scene.control.TextField tfUser;
     @FXML
     private javafx.scene.control.TextField tfPassword;
+    @FXML
+    private Button btnLogin;
 
     @FXML
     void initialize() {
@@ -34,20 +37,33 @@ public class LoginViewController {
 
         if (datosValidos(user, password) == true){
         //2. Validar la información
-            Empleado empleadoIniciado = modelFactoryController.marketplace.autenticar(user, password);
+            Empleado empleadoIniciado = modelFactoryController.autenticar(user, password);
 
             if (empleadoIniciado instanceof Administrador){
-                Parent parent = FXMLLoader.load(MainApp.class.getResource("administrador-view.fxml"));
-                Scene scene = new Scene(parent, 900, 700);
+
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 500, 400);
                 Stage stage = new Stage();
                 stage.setTitle("ADMINISTRADOR");
                 stage.setScene(scene);
+                stage.initOwner(btnLogin.getScene().getWindow());
+                btnLogin.getScene().getWindow().hide();
                 stage.show();
+
             }else if(empleadoIniciado instanceof Vendedor){
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+                Stage stage = new Stage();
+                stage.setTitle("VENDEDOR");
+                stage.setScene(scene);
+                stage.initOwner(btnLogin.getScene().getWindow());
+                btnLogin.getScene().getWindow().hide();
+                stage.show();
 
             }else{
                 tfUser.setText("");
                 tfPassword.setText("");
+                mostrarMensaje("ERROR","ERROR EN INICIO DE SESION","EL USUARIO NO EXISTE", Alert.AlertType.WARNING);
             }
         }
     }

@@ -28,7 +28,7 @@
                </font>
             </Label>
             <TextField fx:id="tfPassword" />
-            <Button mnemonicParsing="false" onAction="#onLoginClick" text="LOGIN">
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#onLoginClick" text="LOGIN">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
