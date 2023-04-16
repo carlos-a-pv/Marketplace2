@@ -7,13 +7,14 @@ import java.util.List;
 
 public class Marketplace {
     private Administrador admin;
+    private Vendedor vendedorSeleccionado;
     private ArrayList<Vendedor> vendedores;
 
     public Marketplace(){
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
-        vendedores.add(new Vendedor("carlos", "perez", "","","user","123"));
-        vendedores.add(new Vendedor("carlos", "perez", "","","user","123"));
+        vendedores.add(new Vendedor("carlos", "perez", "123123","calle","user","123"));
+        vendedores.add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
     }
     public void crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) {
         Vendedor vendedorNuevo = new Vendedor(nombre, apellido,cedula,direccion,user,password);
@@ -42,5 +43,12 @@ public class Marketplace {
 
     public List<Vendedor> getVendedores() {
         return this.vendedores;
+    }
+
+    public void setVendedorSeleccionado(Vendedor vendedor) {
+        this.vendedorSeleccionado = vendedor;
+    }
+    public Vendedor getVendedorSeleccionado(){
+        return this.vendedorSeleccionado;
     }
 }

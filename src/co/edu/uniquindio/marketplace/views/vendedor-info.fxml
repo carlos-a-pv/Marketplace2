@@ -10,20 +10,20 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.marketplace.controllers.VendedorInfoController">
    <children>
       <Pane fx:id="fotoUsuario" layoutX="14.0" layoutY="14.0" prefHeight="215.0" prefWidth="223.0" style="-fx-background-image: url('/resources/usuario.png');" />
-      <Button layoutX="201.0" layoutY="286.0" mnemonicParsing="false" text="ELIMINAR" />
-      <Button layoutX="289.0" layoutY="286.0" mnemonicParsing="false" text="ACTUALIZAR" />
+      <Button fx:id="btnEliminar" layoutX="201.0" layoutY="286.0" mnemonicParsing="false" onAction="#onEliminarVendedorClick" text="ELIMINAR" />
+      <Button layoutX="289.0" layoutY="286.0" mnemonicParsing="false" onAction="#onActualizarVendedorClick" text="ACTUALIZAR" />
       <Label layoutX="270.0" layoutY="14.0" prefHeight="25.0" prefWidth="61.0" text="NOMBRE" />
       <Label layoutX="270.0" layoutY="50.0" prefHeight="25.0" prefWidth="61.0" text="APELLIDO" />
       <Label layoutX="270.0" layoutY="90.0" prefHeight="25.0" prefWidth="61.0" text="CEDULA" />
       <Label layoutX="272.0" layoutY="131.0" prefHeight="25.0" prefWidth="69.0" text="DIRECCION" />
       <Label layoutX="270.0" layoutY="169.0" prefHeight="25.0" prefWidth="61.0" text="USUARIO" />
       <Label layoutX="271.0" layoutY="206.0" prefHeight="25.0" prefWidth="85.0" text="CONTRASEÑA" />
-      <TextField layoutX="361.0" layoutY="14.0" />
-      <TextField layoutX="361.0" layoutY="50.0" />
-      <TextField layoutX="361.0" layoutY="90.0" />
-      <TextField layoutX="361.0" layoutY="131.0" />
-      <TextField layoutX="361.0" layoutY="169.0" />
+      <TextField fx:id="tfNombre" layoutX="361.0" layoutY="14.0" />
+      <TextField fx:id="tfApellido" layoutX="361.0" layoutY="50.0" />
+      <TextField fx:id="tfCedula" layoutX="361.0" layoutY="90.0" />
+      <TextField fx:id="tfDireccion" layoutX="361.0" layoutY="131.0" />
+      <TextField fx:id="tfUser" layoutX="361.0" layoutY="169.0" />
       <Separator layoutX="255.0" layoutY="9.0" orientation="VERTICAL" prefHeight="215.0" prefWidth="7.0" />
-      <TextField layoutX="361.0" layoutY="206.0" />
+      <TextField fx:id="tfPassword" layoutX="361.0" layoutY="206.0" />
    </children>
 </AnchorPane>

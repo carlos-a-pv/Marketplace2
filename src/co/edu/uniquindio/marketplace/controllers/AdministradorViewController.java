@@ -89,21 +89,16 @@ public class AdministradorViewController {
         tbVendedores.refresh();
     }
     private void abrirVentanaInfo(Vendedor vendedor) throws IOException {
-        //vendedorSeleccionado = vendedor;
+        modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
         if (vendedor != null) {
 
             FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-info.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 600, 350);
             Stage stage = new Stage();
             stage.setTitle("INFORMARCION VENDEDOR");
             stage.setScene(scene);
-            //stage.initOwner(btnLogin.getScene().getWindow());
-            //btnLogin.getScene().getWindow().hide();
             stage.show();
-            //getTextNombre.setText(vendedor.getNombre());
-            //getTextApellido.setText(vendedor.getApellido());
-            //getTextCedula.setText(vendedor.getCedula());
-
         }
     }
+
 }

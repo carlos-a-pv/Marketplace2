@@ -14,6 +14,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
     Marketplace marketplace;
 
+
     public Empleado autenticar(String user, String password) {
         Empleado empleado = null;
         try {
@@ -45,11 +46,13 @@ public class ModelFactoryController implements IModelFactoryService {
 
     private void inicializarDatos() {
         marketplace = new Marketplace();
+
     }
 
     public Marketplace getMarketplace() {
         return marketplace;
     }
+
 
     public void setBanco(Marketplace marketplace) {
         this.marketplace = marketplace;
