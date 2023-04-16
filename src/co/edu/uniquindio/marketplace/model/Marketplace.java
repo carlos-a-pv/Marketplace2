@@ -13,10 +13,12 @@ public class Marketplace {
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
         vendedores.add(new Vendedor("carlos", "perez", "","","user","123"));
+        vendedores.add(new Vendedor("carlos", "perez", "","","user","123"));
     }
-    /*public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String fechaNacimiento) {
-
-    }*/
+    public void crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) {
+        Vendedor vendedorNuevo = new Vendedor(nombre, apellido,cedula,direccion,user,password);
+        vendedores.add(vendedorNuevo);
+    }
 
     public Empleado autenticar (String user, String password) throws InicioSesionException {
         Usuario usuarioAValidar = new Usuario(user, password);
@@ -38,4 +40,7 @@ public class Marketplace {
     }
 
 
+    public List<Vendedor> getVendedores() {
+        return this.vendedores;
+    }
 }

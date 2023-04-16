@@ -15,4 +15,9 @@ public class Usuario {
     public String getPassword(){
         return this.password;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }
