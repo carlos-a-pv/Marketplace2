@@ -34,6 +34,8 @@ public class VendedorInfoController {
     private Button btnEliminar;
     @FXML
     private Button btnActualizar;
+
+
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
@@ -55,6 +57,8 @@ public class VendedorInfoController {
 
     }
     private void eliminarEmpleado(){
+
+
         boolean vendedorEliminado = false;
         if(vendedorSeleccionado != null){
             if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar al empleado?") == true){
@@ -62,9 +66,6 @@ public class VendedorInfoController {
                 if(vendedorEliminado == true){
                     modelFactoryController.getMarketplace().getVendedores().remove(vendedorSeleccionado);
                     vendedorSeleccionado = null;
-
-                    //tableEmpleados.getSelectionModel().clearSelection();
-                    //limpiarCamposEmpleado();
                     mostrarMensaje("Notificación empleado", "Empleado eliminado", "El empleado se ha eliminado con éxito", Alert.AlertType.INFORMATION);
                 }else{
                     mostrarMensaje("Notificación empleado", "Empleado no eliminado", "El empleado no se puede eliminar", Alert.AlertType.ERROR);

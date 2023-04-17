@@ -34,9 +34,6 @@ public class FormularioVendedorViewController {
     private TextField tfUser;
     @FXML
     private TextField tfPassword;
-
-    Vendedor vendedorCreado;
-
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
@@ -57,32 +54,17 @@ public class FormularioVendedorViewController {
             vendedor = crudVendedorViewController.crearVendedor(nombre,apellido,cedula,direccion, user, password);
             //administradorViewController.llenarTabla(modelFactoryController.getMarketplace().getVendedores());
             if(vendedor != null){
-                //administradorViewController.listaVendedoresData.add(vendedor);
-                //vendedorCreado = vendedor;
-                //administradorViewController.getListaVendedoresData().add(vendedor);
-                modelFactoryController.getMarketplace().getVendedores().add(vendedor);
-                //administradorViewController.getTbVendedores().refresh();
                 mostrarMensaje("Notificación empleado", "Empleado creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
-                //limpiarCamposEmpleado();
             }else{
-                vendedorCreado = null;
                 mostrarMensaje("Notificación empleado", "Empleado no creado", "El empleado no se ha creado con éxito", Alert.AlertType.INFORMATION);
             }
         }else{
             mostrarMensaje("Notificación empleado", "Empleado no creado", "Los datos ingresados son invalidos", Alert.AlertType.ERROR);
         }
-
-        //FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
-        //Scene scene = new Scene(fxmlLoader.load(), 600, 500);
         Stage stage = new Stage();
-       // stage.setTitle("ADMINISTRADOR");
-       //stage.setScene(scene);
         stage.initOwner(btnCrearVendedor.getScene().getWindow());
         btnCrearVendedor.getScene().getWindow().hide();
-        //stage.show();
-        //administradorViewController.llenarTabla(crudVendedorViewController.obtenerVendedores());
-        //administradorViewController.llenarTabla(crudVendedorViewController.obtenerVendedores());
-        //stage.show();
+
 
     }
 
@@ -134,8 +116,4 @@ public class FormularioVendedorViewController {
             return false;
         }
     }
-    public Vendedor getVendedorCreado(){
-        return this.vendedorCreado;
-    }
-
 }

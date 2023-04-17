@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class AdministradorViewController {
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
         crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
-        tbVendedores.getItems().clear();
+        //tbVendedores.getItems().clear();
         tbVendedores.setItems(getListaVendedoresData());
         //llenarTabla(getListaVendedoresData());
         //inicializar datos en el tabla
@@ -80,7 +81,6 @@ public class AdministradorViewController {
                     try {
                         abrirVentanaInfo((Vendedor) newValue);
 
-                        //tbVendedores.getSelectionModel().clearSelection();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -92,10 +92,7 @@ public class AdministradorViewController {
         view.setFitHeight(20);
         view.setPreserveRatio(true);
         btnVolver.setGraphic(view);
-
     }
-
-
 
     @FXML
     public void OnVolverClick(ActionEvent actionEvent) throws IOException {
@@ -110,30 +107,17 @@ public class AdministradorViewController {
     }
     @FXML
     public void onCrearVendedorClick(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/formulario-vendedor.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/formulario-vendedor.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 350);
-
-        FormularioVendedorViewController controlador = fxmlLoader.getController();
-
         Stage stage = new Stage();
         stage.setTitle("CREAR VENDEDOR");
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        //stage.initOwner(btnCrearVendedor.getScene().getWindow());
-        //btnCrearVendedor.getScene().getWindow().hide();
         stage.showAndWait();
+        tbVendedores.getItems().clear();
+        tbVendedores.setItems(getListaVendedoresData());
+        tbVendedores.refresh();
 
-        /*Vendedor v = controlador.getVendedorCreado();
-        if(v != null){
-            getListaVendedoresData().add(v);
-            tbVendedores.refresh();
-        }else{
-
-        }*/
-
-
-        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
-
-        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
     }
 
     public void onBuscarClick(ActionEvent actionEvent) {
@@ -144,17 +128,22 @@ public class AdministradorViewController {
     }
     @FXML
     private void abrirVentanaInfo(Vendedor vendedor) throws IOException {
-        modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
+         modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
         if (vendedor != null) {
 
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-info.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/vendedor-info.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 350);
             Stage stage = new Stage();
-            stage.setTitle("INFORMARCION VENDEDOR");
+            stage.setTitle("INFOR VENDEDOR");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            stage.show();
+            stage.showAndWait();
+            tbVendedores.getItems().clear();
+            tbVendedores.setItems(getListaVendedoresData());
+            tbVendedores.refresh();
         }
-
+        //tbVendedores.getSelectionModel().clearSelection();
+        tbVendedores.getSelectionModel().clearSelection();
     }
 
     public ObservableList<Vendedor> getListaVendedoresData() {
