@@ -1,6 +1,7 @@
 package co.edu.uniquindio.marketplace.model;
 
 import co.edu.uniquindio.marketplace.exceptions.InicioSesionException;
+import co.edu.uniquindio.marketplace.exceptions.VendedorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,37 @@ public class Marketplace {
         vendedores.add(new Vendedor("carlos", "perez", "123123","calle","user","123"));
         vendedores.add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
     }
-    public void crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) {
-        Vendedor vendedorNuevo = new Vendedor(nombre, apellido,cedula,direccion,user,password);
-        vendedores.add(vendedorNuevo);
+    public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
+        Vendedor nuevoVendedor = null;
+        //1. verificar si existe
+        boolean vendedorExiste = verificarVendedorExistente(cedula);
+        if(vendedorExiste){
+            throw new VendedorException("El vendedor con cedula: "+cedula+" ya existe");
+        }else{
+            nuevoVendedor = new Vendedor(nombre, apellido, cedula, direccion, user, password);
+            vendedores.add(nuevoVendedor);
+        }
+        return nuevoVendedor;
+    }
+    public boolean verificarVendedorExistente(String cedula) {
+        Empleado empleado = null;
+        empleado = obtenerEmpleado(cedula);
+        if(empleado == null)
+            return false;
+        else
+            return true;
     }
 
+    public Empleado obtenerEmpleado(String cedula) {
+        Vendedor vendedorEncontrado = null;
+        for (Vendedor vendedor : getVendedores()) {
+            if(vendedor.getCedula().equalsIgnoreCase(cedula)){
+                vendedorEncontrado = vendedor;
+                break;
+            }
+        }
+        return vendedorEncontrado;
+    }
     public Empleado autenticar (String user, String password) throws InicioSesionException {
         Usuario usuarioAValidar = new Usuario(user, password);
 

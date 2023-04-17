@@ -4,6 +4,7 @@ import co.edu.uniquindio.marketplace.MainApp;
 import co.edu.uniquindio.marketplace.model.Usuario;
 import co.edu.uniquindio.marketplace.model.Vendedor;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,11 @@ import java.util.List;
 
 public class AdministradorViewController {
     ModelFactoryController modelFactoryController;
+
+    public AdministradorViewController(ModelFactoryController modelFactoryController){
+        this.modelFactoryController = modelFactoryController;
+    }
+
     @FXML
     private Button btnVolver;
     @FXML
@@ -63,6 +69,7 @@ public class AdministradorViewController {
                 .addListener((observable, oldValue, newValue) -> {
                     try {
                         abrirVentanaInfo((Vendedor) newValue);
+                        tbVendedores.getSelectionModel().getTableView();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -75,19 +82,41 @@ public class AdministradorViewController {
         btnVolver.setGraphic(view);
 
     }
-
-    public void OnVolverClick(ActionEvent actionEvent) {
+    @FXML
+    public void OnVolverClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+        Stage stage = new Stage();
+        stage.setTitle("LOGIN");
+        stage.setScene(scene);
+        stage.initOwner(btnVolver.getScene().getWindow());
+        btnVolver.getScene().getWindow().hide();
+        stage.show();
     }
+    @FXML
+    public void onCrearVendedorClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/formulario-vendedor.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+        Stage stage = new Stage();
+        stage.setTitle("CREAR VENDEDOR");
+        stage.setScene(scene);
+        //stage.initOwner(btnCrearVendedor.getScene().getWindow());
+        //btnCrearVendedor.getScene().getWindow().hide();
+        stage.show();
 
-    public void onCrearVendedorClick(ActionEvent actionEvent) {
+
+        llenarTabla(modelFactoryController.getMarketplace().getVendedores());
+        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
     }
 
     public void onBuscarClick(ActionEvent actionEvent) {
     }
-    private void llenarTabla(List<Vendedor> vendedores) {
+    @FXML
+    public void llenarTabla(List<Vendedor> vendedores) {
         tbVendedores.setItems(FXCollections.observableArrayList(vendedores));
         tbVendedores.refresh();
     }
+    @FXML
     private void abrirVentanaInfo(Vendedor vendedor) throws IOException {
         modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
         if (vendedor != null) {
@@ -99,6 +128,8 @@ public class AdministradorViewController {
             stage.setScene(scene);
             stage.show();
         }
+
     }
+
 
 }

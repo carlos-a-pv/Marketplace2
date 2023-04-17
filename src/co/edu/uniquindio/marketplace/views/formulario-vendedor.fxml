@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="355.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.marketplace.controllers.FormularioVendedorViewController">
+   <children>
+      <Label layoutX="142.0" layoutY="14.0" text="CREACIÓN DE VENDEDOR" textFill="#0011ff">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="99.0" layoutY="78.0" text="NOMBRE" />
+      <Label layoutX="101.0" layoutY="114.0" text="APELLIDO" />
+      <Label layoutX="101.0" layoutY="151.0" text="CEDULA" />
+      <Label layoutX="101.0" layoutY="192.0" text="DIRECCION" />
+      <Label layoutX="102.0" layoutY="227.0" text="USUARIO" />
+      <Label layoutX="101.0" layoutY="267.0" text="CONTRASEÑA" />
+      <TextField fx:id="tfNombre" layoutX="206.0" layoutY="74.0" prefHeight="25.0" prefWidth="244.0" />
+      <TextField fx:id="tfApellido" layoutX="206.0" layoutY="110.0" prefHeight="25.0" prefWidth="244.0" />
+      <TextField fx:id="tfCedula" layoutX="206.0" layoutY="147.0" prefHeight="25.0" prefWidth="244.0" />
+      <TextField fx:id="tfDireccion" layoutX="206.0" layoutY="188.0" prefHeight="25.0" prefWidth="244.0" />
+      <TextField fx:id="tfUser" layoutX="206.0" layoutY="223.0" prefHeight="25.0" prefWidth="244.0" />
+      <TextField fx:id="tfPassword" layoutX="206.0" layoutY="263.0" prefHeight="25.0" prefWidth="244.0" />
+      <Button fx:id="btnCrearVendedor" layoutX="236.0" layoutY="310.0" mnemonicParsing="false" onAction="#onCrearVendedorClick" text="CREAR">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

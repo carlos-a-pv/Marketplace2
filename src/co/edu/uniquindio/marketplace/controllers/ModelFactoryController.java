@@ -14,24 +14,11 @@ public class ModelFactoryController implements IModelFactoryService {
 
     Marketplace marketplace;
 
-
-    public Empleado autenticar(String user, String password) {
-        Empleado empleado = null;
-        try {
-            empleado = getMarketplace().autenticar(user, password);
-        } catch (InicioSesionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return empleado;
-    }
-
-
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
     private static class SingletonHolder {
         // El constructor de Singleton puede ser llamado desde aquí al ser protected
-        private final static ModelFactoryController eINSTANCE = new ModelFactoryController();
+    private final static ModelFactoryController eINSTANCE = new ModelFactoryController();
     }
 
     // Método para obtener la instancia de nuestra clase
@@ -46,7 +33,6 @@ public class ModelFactoryController implements IModelFactoryService {
 
     private void inicializarDatos() {
         marketplace = new Marketplace();
-
     }
 
     public Marketplace getMarketplace() {
@@ -57,18 +43,39 @@ public class ModelFactoryController implements IModelFactoryService {
     public void setBanco(Marketplace marketplace) {
         this.marketplace = marketplace;
     }
-    /*
+
     @Override
-    public Vendedor crearVendedor(String nombre, String apellido, String cedula, String fechaNacimiento) {
+    public Vendedor crearVendedor(String nombre, String apellido, String cedula, String direccion, String user, String password) {
         Vendedor vendedor = null;
         try {
-            vendedor = getMarketplace().crearEmpleado(nombre, apellido, cedula, fechaNacimiento);
+            vendedor = getMarketplace().crearEmpleado(nombre, apellido, cedula, direccion, user, password);
         } catch (VendedorException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return vendedor;
+    }
+
+    @Override
+    public boolean eliminarVendedor(String nombre, String apellido, String cedula, String direccion, String user, String password) {
+        return false;
+    }
+
+    @Override
+    public boolean actualizarVendedor(String nombre, String apellido, String cedula, String direccion, String user, String password) {
+        return false;
+    }
+
+    public Empleado autenticar(String user, String password) {
+        Empleado empleado = null;
+        try {
+            empleado = getMarketplace().autenticar(user, password);
+        } catch (InicioSesionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return empleado;
-    }*/
+    }
 /*
     @Override
     public Boolean eliminarEmpleado(String cedula) {
