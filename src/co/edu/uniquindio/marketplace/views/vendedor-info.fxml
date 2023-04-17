@@ -11,7 +11,7 @@
    <children>
       <Pane fx:id="fotoUsuario" layoutX="14.0" layoutY="14.0" prefHeight="215.0" prefWidth="223.0" style="-fx-background-image: url('/resources/usuario.png');" />
       <Button fx:id="btnEliminar" layoutX="201.0" layoutY="286.0" mnemonicParsing="false" onAction="#onEliminarVendedorClick" text="ELIMINAR" />
-      <Button layoutX="289.0" layoutY="286.0" mnemonicParsing="false" onAction="#onActualizarVendedorClick" text="ACTUALIZAR" />
+      <Button fx:id="btnActualizar" layoutX="289.0" layoutY="286.0" mnemonicParsing="false" onAction="#onActualizarVendedorClick" text="ACTUALIZAR" />
       <Label layoutX="270.0" layoutY="14.0" prefHeight="25.0" prefWidth="61.0" text="NOMBRE" />
       <Label layoutX="270.0" layoutY="50.0" prefHeight="25.0" prefWidth="61.0" text="APELLIDO" />
       <Label layoutX="270.0" layoutY="90.0" prefHeight="25.0" prefWidth="61.0" text="CEDULA" />

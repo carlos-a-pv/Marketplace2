@@ -35,6 +35,8 @@ public class FormularioVendedorViewController {
     @FXML
     private TextField tfPassword;
 
+    Vendedor vendedorCreado;
+
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
@@ -53,25 +55,34 @@ public class FormularioVendedorViewController {
         if(datosValidos(nombre, apellido, cedula, direccion, user, password)== true){
             Vendedor vendedor = null;
             vendedor = crudVendedorViewController.crearVendedor(nombre,apellido,cedula,direccion, user, password);
+            //administradorViewController.llenarTabla(modelFactoryController.getMarketplace().getVendedores());
             if(vendedor != null){
-                //administradorViewController.getVendedores().add(vendedor);
+                //administradorViewController.listaVendedoresData.add(vendedor);
+                //vendedorCreado = vendedor;
+                //administradorViewController.getListaVendedoresData().add(vendedor);
+                modelFactoryController.getMarketplace().getVendedores().add(vendedor);
+                //administradorViewController.getTbVendedores().refresh();
                 mostrarMensaje("Notificación empleado", "Empleado creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
                 //limpiarCamposEmpleado();
             }else{
+                vendedorCreado = null;
                 mostrarMensaje("Notificación empleado", "Empleado no creado", "El empleado no se ha creado con éxito", Alert.AlertType.INFORMATION);
             }
         }else{
             mostrarMensaje("Notificación empleado", "Empleado no creado", "Los datos ingresados son invalidos", Alert.AlertType.ERROR);
         }
+
         //FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
-        //Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+        //Scene scene = new Scene(fxmlLoader.load(), 600, 500);
         Stage stage = new Stage();
-        //stage.setTitle("CREAR VENDEDOR");
-        //stage.setScene(scene);
+       // stage.setTitle("ADMINISTRADOR");
+       //stage.setScene(scene);
         stage.initOwner(btnCrearVendedor.getScene().getWindow());
         btnCrearVendedor.getScene().getWindow().hide();
         //stage.show();
-        administradorViewController.llenarTabla(modelFactoryController.getMarketplace().getVendedores());
+        //administradorViewController.llenarTabla(crudVendedorViewController.obtenerVendedores());
+        //administradorViewController.llenarTabla(crudVendedorViewController.obtenerVendedores());
+        //stage.show();
 
     }
 
@@ -122,6 +133,9 @@ public class FormularioVendedorViewController {
             mostrarMensaje("Notificación cliente","Datos invalidos",mensaje, Alert.AlertType.WARNING);
             return false;
         }
+    }
+    public Vendedor getVendedorCreado(){
+        return this.vendedorCreado;
     }
 
 }

@@ -23,8 +23,11 @@ import java.util.List;
 
 public class AdministradorViewController {
     ModelFactoryController modelFactoryController;
+    CrudVendedorViewController crudVendedorViewController;
+    ObservableList<Vendedor> listaVendedoresData = FXCollections.observableArrayList();
 
-    public AdministradorViewController(ModelFactoryController modelFactoryController){
+    public AdministradorViewController( ){}
+    public AdministradorViewController( ModelFactoryController modelFactoryController) {
         this.modelFactoryController = modelFactoryController;
     }
 
@@ -53,11 +56,18 @@ public class AdministradorViewController {
 
     Vendedor vendedorSeleccionado;
 
+
     @FXML
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
+        crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
+        tbVendedores.getItems().clear();
+        tbVendedores.setItems(getListaVendedoresData());
+        //llenarTabla(getListaVendedoresData());
         //inicializar datos en el tabla
-        llenarTabla(modelFactoryController.getMarketplace().getVendedores());
+        //vendedores = (ObservableList<Vendedor>) modelFactoryController.getMarketplace().getVendedores();
+        //tbVendedores.setItems(vendedores);
+        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
         this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         this.colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         this.colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
@@ -69,10 +79,12 @@ public class AdministradorViewController {
                 .addListener((observable, oldValue, newValue) -> {
                     try {
                         abrirVentanaInfo((Vendedor) newValue);
-                        tbVendedores.getSelectionModel().getTableView();
+
+                        //tbVendedores.getSelectionModel().clearSelection();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    //tbVendedores.getSelectionModel().clearSelection();
                 });
         //-----------------------------------------------------------------------------
         Image img = new Image("/resources/hacia-atras.png");
@@ -82,6 +94,9 @@ public class AdministradorViewController {
         btnVolver.setGraphic(view);
 
     }
+
+
+
     @FXML
     public void OnVolverClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/login-view.fxml"));
@@ -97,21 +112,32 @@ public class AdministradorViewController {
     public void onCrearVendedorClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/formulario-vendedor.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+
+        FormularioVendedorViewController controlador = fxmlLoader.getController();
+
         Stage stage = new Stage();
         stage.setTitle("CREAR VENDEDOR");
         stage.setScene(scene);
         //stage.initOwner(btnCrearVendedor.getScene().getWindow());
         //btnCrearVendedor.getScene().getWindow().hide();
-        stage.show();
+        stage.showAndWait();
+
+        /*Vendedor v = controlador.getVendedorCreado();
+        if(v != null){
+            getListaVendedoresData().add(v);
+            tbVendedores.refresh();
+        }else{
+
+        }*/
 
 
-        llenarTabla(modelFactoryController.getMarketplace().getVendedores());
+        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
+
         //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
     }
 
     public void onBuscarClick(ActionEvent actionEvent) {
     }
-    @FXML
     public void llenarTabla(List<Vendedor> vendedores) {
         tbVendedores.setItems(FXCollections.observableArrayList(vendedores));
         tbVendedores.refresh();
@@ -129,6 +155,14 @@ public class AdministradorViewController {
             stage.show();
         }
 
+    }
+
+    public ObservableList<Vendedor> getListaVendedoresData() {
+        listaVendedoresData.addAll(crudVendedorViewController.obtenerVendedores());
+        return listaVendedoresData;
+    }
+    public TableView getTbVendedores() {
+        return tbVendedores;
     }
 
 

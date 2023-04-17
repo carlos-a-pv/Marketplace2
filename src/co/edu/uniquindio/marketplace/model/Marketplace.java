@@ -14,8 +14,7 @@ public class Marketplace {
     public Marketplace(){
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
-        vendedores.add(new Vendedor("carlos", "perez", "123123","calle","user","123"));
-        vendedores.add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
+
     }
     public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
         Vendedor nuevoVendedor = null;
@@ -28,6 +27,19 @@ public class Marketplace {
             vendedores.add(nuevoVendedor);
         }
         return nuevoVendedor;
+    }
+
+    public Boolean eliminarVendedor(String cedula) throws VendedorException {
+        Empleado empleado = null;
+        boolean flagExiste = false;
+        empleado = obtenerEmpleado(cedula);
+        if(empleado == null)
+            throw new VendedorException("El empleado a eliminar no existe");
+        else{
+            vendedores.remove(empleado);
+            flagExiste = true;
+        }
+        return flagExiste;
     }
     public boolean verificarVendedorExistente(String cedula) {
         Empleado empleado = null;
@@ -68,7 +80,7 @@ public class Marketplace {
     }
 
 
-    public List<Vendedor> getVendedores() {
+    public ArrayList<Vendedor> getVendedores() {
         return this.vendedores;
     }
 
@@ -77,5 +89,40 @@ public class Marketplace {
     }
     public Vendedor getVendedorSeleccionado(){
         return this.vendedorSeleccionado;
+    }
+
+    public boolean actualizarEmpleado(String cedulaActual, String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
+        Vendedor vendedor = null;
+        boolean flagExiste;
+        vendedor = obtenerVendedor(cedulaActual);
+        if(vendedor == null)
+            throw new VendedorException("El empleado a actualizar no existe");
+        else{
+            vendedor.setNombre(nombre);
+            vendedor.setApellido(apellido);
+            vendedor.setCedula(cedula);
+            vendedor.setDireccion(direccion);
+            vendedor.getUser().setNombre(user);
+            vendedor.setContra(password);
+            flagExiste = true;
+
+        }
+        return flagExiste;
+    }
+
+
+    public Vendedor obtenerVendedor(String cedula) {
+        Vendedor vendedorEncontrado = null;
+        for (Vendedor vendedor : vendedores) {
+            if(vendedor.getCedula().equalsIgnoreCase(cedula)){
+                vendedorEncontrado = vendedor;
+                break;
+            }
+        }
+        return vendedorEncontrado;
+    }
+
+    public ArrayList<Vendedor> obtenerVendedores() {
+        return getVendedores();
     }
 }

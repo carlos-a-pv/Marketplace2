@@ -20,4 +20,12 @@ public class Usuario {
     public String toString() {
         return nombre;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

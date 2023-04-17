@@ -33,6 +33,9 @@ public class ModelFactoryController implements IModelFactoryService {
 
     private void inicializarDatos() {
         marketplace = new Marketplace();
+        marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
+        marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
+
     }
 
     public Marketplace getMarketplace() {
@@ -57,13 +60,32 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     @Override
-    public boolean eliminarVendedor(String nombre, String apellido, String cedula, String direccion, String user, String password) {
-        return false;
+    public boolean eliminarVendedor(String cedula) {
+        boolean flagExiste = false;
+        try {
+            flagExiste = getMarketplace().eliminarVendedor(cedula);
+        } catch (VendedorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return flagExiste;
     }
 
     @Override
-    public boolean actualizarVendedor(String nombre, String apellido, String cedula, String direccion, String user, String password) {
-        return false;
+    public boolean actualizarVendedor(String cedulaActual, String nombre, String apellido, String cedula, String direccion, String user, String password) {
+        boolean flagExiste = false;
+        try {
+            flagExiste = getMarketplace().actualizarEmpleado(cedulaActual, nombre, apellido, cedula, direccion, user, password);
+        } catch (VendedorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return flagExiste;
+    }
+
+    @Override
+    public ArrayList<Vendedor> obtenerVendedores() {
+        return getMarketplace().obtenerVendedores();
     }
 
     public Empleado autenticar(String user, String password) {
