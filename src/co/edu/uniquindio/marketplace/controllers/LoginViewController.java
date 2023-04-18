@@ -40,6 +40,7 @@ public class LoginViewController {
             Empleado empleadoIniciado = modelFactoryController.autenticar(user, password);
 
             if (empleadoIniciado instanceof Administrador){
+                modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario Admin", 1, "inicioSesión");
 
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 500, 400);
@@ -51,6 +52,8 @@ public class LoginViewController {
                 stage.show();
 
             }else if(empleadoIniciado instanceof Vendedor){
+                String usuario = ((Vendedor) empleadoIniciado).getNombre();
+                modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario: "+usuario, 1, "inicioSesión");
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 500, 400);
                 Stage stage = new Stage();

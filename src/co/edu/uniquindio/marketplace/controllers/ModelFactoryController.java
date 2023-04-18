@@ -6,8 +6,11 @@ import co.edu.uniquindio.marketplace.exceptions.VendedorException;
 import co.edu.uniquindio.marketplace.model.Empleado;
 import co.edu.uniquindio.marketplace.model.Marketplace;
 import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import co.edu.uniquindio.marketplace.servicies.IModelFactoryService;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ModelFactoryController implements IModelFactoryService {
@@ -27,8 +30,54 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     public ModelFactoryController() {
-        System.out.println("invocación clase singleton");
-        inicializarDatos();
+        //1. inicializar datos y luego guardarlo en archivos
+        //inicializarSalvarDatos();
+
+
+        //2. Cargar los datos de los archivos
+		cargarDatosDesdeArchivos();
+        inicializarSalvarDatos();
+
+        //3. Guardar y Cargar el recurso serializable binario
+//		guardarResourceBinario();
+//		cargarResourceBinario();
+
+
+        //4. Guardar y Cargar el recurso serializable XML
+//		guardarResourceXML();
+//		cargarResourceXML();
+
+        //Siempre se debe verificar si la raiz del recurso es null
+
+        if(marketplace == null){
+            inicializarDatos();
+            //guardarResourceXML();
+        }
+
+
+    }
+
+    private void inicializarSalvarDatos() {
+        //inicializarDatos();
+        try {
+            Persistencia.guardarVendedores(getMarketplace().getVendedores());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void cargarDatosDesdeArchivos() {
+        this.marketplace = new Marketplace();
+        try {
+            ArrayList<Vendedor> listaVendedores =new ArrayList<Vendedor>();
+            listaVendedores = Persistencia.cargarVendedores();
+            getMarketplace().getVendedores().addAll(listaVendedores);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void inicializarDatos() {
@@ -37,11 +86,12 @@ public class ModelFactoryController implements IModelFactoryService {
         marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
 
     }
-
+    public void registrarAccionesSistema(String mensaje, int nivel, String accion) {
+        Persistencia.guardaRegistroLog(mensaje, nivel, accion);
+    }
     public Marketplace getMarketplace() {
         return marketplace;
     }
-
 
     public void setBanco(Marketplace marketplace) {
         this.marketplace = marketplace;
@@ -52,6 +102,7 @@ public class ModelFactoryController implements IModelFactoryService {
         Vendedor vendedor = null;
         try {
             vendedor = getMarketplace().crearEmpleado(nombre, apellido, cedula, direccion, user, password);
+            inicializarSalvarDatos();
         } catch (VendedorException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -98,49 +149,7 @@ public class ModelFactoryController implements IModelFactoryService {
         }
         return empleado;
     }
-/*
-    @Override
-    public Boolean eliminarEmpleado(String cedula) {
-        boolean flagExiste = false;
-        try {
-            flagExiste = getBanco().eliminarEmpleado(cedula);
-        } catch (EmpleadoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return flagExiste;
-    }*/
-/*
-    @Override
-    public Empleado obtenerEmpleado(String cedula) {
-        // TODO Auto-generated method stub
-        return null;
-    }*/
-/*
-    @Override
-    public ArrayList<Empleado> obtenerEmpleados() {
-//		getBanco().getListaEmpleados();
-        return getBanco().obtenerEmpleados();
-    }
 
-    @Override
-    public boolean actualizarEmpleado(String cedulaActual, String nombre, String apellido, String cedula,
-                                      String fechaNacimiento) {
-        boolean flagExiste = false;
-        try {
-            flagExiste = getBanco().actualizarEmpleado(cedulaActual, nombre, apellido, cedula, fechaNacimiento);
-        } catch (EmpleadoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return flagExiste;
-    }
-
-    @Override
-    public boolean actualizarCliente(String cedula) {
-        // TODO Auto-generated method stub
-        return false;
-    }*/
 
 
 }

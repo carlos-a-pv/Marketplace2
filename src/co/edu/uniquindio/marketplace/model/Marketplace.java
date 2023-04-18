@@ -74,7 +74,7 @@ public class Marketplace {
             return vendedor;
         }
         else {
-            throw new InicioSesionException("El empleado con cedula: "+user+" no existe");
+            throw new InicioSesionException("El empleado con usuario: "+user+" no existe");
         }
 
     }

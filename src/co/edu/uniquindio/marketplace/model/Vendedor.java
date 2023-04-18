@@ -7,7 +7,7 @@ public class Vendedor extends Empleado{
     private String cedula;
     private String direccion;
 
-     public Vendedor(String nombre, String apellido, String cedula, String direccion, String user, String password){
+    public Vendedor(String nombre, String apellido, String cedula, String direccion, String user, String password){
          super(new Usuario(user, password));
          Usuario userNew = new Usuario(user, password);
          this.nombre = nombre;

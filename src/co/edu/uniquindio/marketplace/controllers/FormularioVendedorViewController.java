@@ -54,6 +54,7 @@ public class FormularioVendedorViewController {
             vendedor = crudVendedorViewController.crearVendedor(nombre,apellido,cedula,direccion, user, password);
             //administradorViewController.llenarTabla(modelFactoryController.getMarketplace().getVendedores());
             if(vendedor != null){
+                modelFactoryController.registrarAccionesSistema("Se ha creado el vendedor con cedula: "+vendedor.getCedula(), 1,"Creacion nuevo vendedor");
                 mostrarMensaje("Notificación empleado", "Empleado creado", "El empleado se ha creado con éxito", Alert.AlertType.INFORMATION);
             }else{
                 mostrarMensaje("Notificación empleado", "Empleado no creado", "El empleado no se ha creado con éxito", Alert.AlertType.INFORMATION);
