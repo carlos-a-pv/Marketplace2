@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ModelFactoryController implements IModelFactoryService {
 
-    Marketplace marketplace;
+    static Marketplace marketplace;
 
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
@@ -36,7 +36,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
         //2. Cargar los datos de los archivos
 		cargarDatosDesdeArchivos();
-        inicializarSalvarDatos();
+
 
         //3. Guardar y Cargar el recurso serializable binario
 //		guardarResourceBinario();
@@ -54,10 +54,10 @@ public class ModelFactoryController implements IModelFactoryService {
             //guardarResourceXML();
         }
 
-
+        inicializarSalvarDatos();
     }
 
-    private void inicializarSalvarDatos() {
+    private static void inicializarSalvarDatos() {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
@@ -72,7 +72,11 @@ public class ModelFactoryController implements IModelFactoryService {
         try {
             ArrayList<Vendedor> listaVendedores =new ArrayList<Vendedor>();
             listaVendedores = Persistencia.cargarVendedores();
-            getMarketplace().getVendedores().addAll(listaVendedores);
+            if(listaVendedores != null){
+                getMarketplace().getVendedores().addAll(listaVendedores);
+            }else{
+                marketplace = null;
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -81,15 +85,15 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     private void inicializarDatos() {
-        marketplace = new Marketplace();
-        marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
-        marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
+        this.marketplace = new Marketplace();
+        this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
+        this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
 
     }
     public void registrarAccionesSistema(String mensaje, int nivel, String accion) {
         Persistencia.guardaRegistroLog(mensaje, nivel, accion);
     }
-    public Marketplace getMarketplace() {
+    public static Marketplace getMarketplace() {
         return marketplace;
     }
 
@@ -107,6 +111,7 @@ public class ModelFactoryController implements IModelFactoryService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        inicializarSalvarDatos();
         return vendedor;
     }
 
@@ -119,6 +124,7 @@ public class ModelFactoryController implements IModelFactoryService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        inicializarSalvarDatos();
         return flagExiste;
     }
 
@@ -131,6 +137,7 @@ public class ModelFactoryController implements IModelFactoryService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        inicializarSalvarDatos();
         return flagExiste;
     }
 

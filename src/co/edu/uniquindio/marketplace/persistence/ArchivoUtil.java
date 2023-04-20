@@ -51,18 +51,22 @@ public  class ArchivoUtil {
      * @throws IOException
      */
     public static ArrayList<String> leerArchivo(String ruta) throws IOException {
+        try{
+            ArrayList<String>  contenido = new ArrayList<String>();
+            FileReader fr=new FileReader(ruta);
+            BufferedReader bfr=new BufferedReader(fr);
 
-        ArrayList<String>  contenido = new ArrayList<String>();
-        FileReader fr=new FileReader(ruta);
-        BufferedReader bfr=new BufferedReader(fr);
-        String linea="";
-        while((linea = bfr.readLine())!=null)
-        {
-            contenido.add(linea);
+            String linea="";
+            while((linea = bfr.readLine())!=null)
+            {
+                contenido.add(linea);
+            }
+            bfr.close();
+            fr.close();
+            return contenido;
+        }catch (FileNotFoundException e){
+            return null;
         }
-        bfr.close();
-        fr.close();
-        return contenido;
     }
 
 

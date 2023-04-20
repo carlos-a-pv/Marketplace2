@@ -84,11 +84,12 @@ public class Persistencia {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static ArrayList<Vendedor> cargarVendedores() throws FileNotFoundException, IOException
-    {
+    public static ArrayList<Vendedor> cargarVendedores() throws FileNotFoundException, IOException {
         ArrayList<Vendedor> vendedores =new ArrayList<Vendedor>();
-
         ArrayList<String> contenido = ArchivoUtil.leerArchivo(RUTA_ARCHIVO_VENDEDORES);
+        if(contenido ==null){
+            return null;
+        }
         String linea="";
 
         for (int i = 0; i < contenido.size(); i++)
@@ -100,7 +101,7 @@ public class Persistencia {
             vendedor.setCedula(linea.split(",")[2]);
             vendedor.setDireccion(linea.split(",")[3]);
             vendedor.getUser().setNombre(linea.split(",")[4]);
-            vendedor.getUser().setPassword(linea.split(",")[5]);
+            vendedor.setContra(linea.split(",")[5]);
             vendedores.add(vendedor);
         }
         return vendedores;
