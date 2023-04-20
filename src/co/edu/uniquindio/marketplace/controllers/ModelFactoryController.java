@@ -109,7 +109,8 @@ public class ModelFactoryController implements IModelFactoryService {
             inicializarSalvarDatos();
         } catch (VendedorException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
+            registrarAccionesSistema("El usuario ya existe en el sistema", 2, "Creacion de vendedor:");
         }
         inicializarSalvarDatos();
         return vendedor;
@@ -152,7 +153,8 @@ public class ModelFactoryController implements IModelFactoryService {
             empleado = getMarketplace().autenticar(user, password);
         } catch (InicioSesionException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            //e.printStackTrace();
+            registrarAccionesSistema("El usuario no existe en el sistema", 2, "inicio de sesion");
         }
         return empleado;
     }

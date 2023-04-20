@@ -65,6 +65,7 @@ public class VendedorInfoController {
                 vendedorEliminado = crudVendedorViewController.eliminarVendedor(vendedorSeleccionado.getCedula());
                 if(vendedorEliminado == true){
                     modelFactoryController.getMarketplace().getVendedores().remove(vendedorSeleccionado);
+                    modelFactoryController.registrarAccionesSistema("Se ha eliminado el usuario con cedula"+vendedorSeleccionado.getCedula(), 1,"Elimininacion vendedor");
                     vendedorSeleccionado = null;
                     mostrarMensaje("Notificación empleado", "Empleado eliminado", "El empleado se ha eliminado con éxito", Alert.AlertType.INFORMATION);
                 }else{
@@ -102,6 +103,7 @@ public class VendedorInfoController {
                 if(vendedorActualizado == true){
                     //tableEmpleados.refresh();
                     mostrarMensaje("Notificación empleado", "Empleado actualizado", "El empleado se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                    modelFactoryController.registrarAccionesSistema("Se ha actualizado el vendedor con cedula"+vendedorSeleccionado.getCedula(), 1, "Actualizacion vendedor");
                     //limpiarCamposEmpleado();
                 }else{
                     mostrarMensaje("Notificación empleado", "Empleado no actualizado", "El empleado no se ha actualizado con éxito", Alert.AlertType.INFORMATION);

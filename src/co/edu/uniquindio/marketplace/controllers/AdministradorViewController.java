@@ -80,8 +80,9 @@ public class AdministradorViewController {
                 .addListener((observable, oldValue, newValue) -> {
                     try {
                         abrirVentanaInfo((Vendedor) newValue);
-
+                        tbVendedores.getSelectionModel().clearSelection();
                     } catch (IOException e) {
+                        modelFactoryController.registrarAccionesSistema("Seleccion de usuaario", 1, "Seleccion de usuario");
                         //throw new RuntimeException(e);
                     }
                     //tbVendedores.getSelectionModel().clearSelection();

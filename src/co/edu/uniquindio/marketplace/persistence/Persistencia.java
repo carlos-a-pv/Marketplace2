@@ -54,26 +54,13 @@ public class Persistencia {
 
         for(Vendedor vendedor:listaVendedores)
         {
-            contenido+= vendedor.getNombre()+","+vendedor.getApellido()+","+vendedor.getCedula()+","+vendedor.getDireccion()
-                    +","+vendedor.getUser().getNombre()+","+vendedor.getContra()+"\n";
+            contenido+= vendedor.getNombre()+"@@"+vendedor.getApellido()+"@@"+vendedor.getCedula()+"@@"+vendedor.getDireccion()
+                    +"@@"+vendedor.getUser().getNombre()+"@@"+vendedor.getContra()+"\n";
         }
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_VENDEDORES, contenido, false);
 
     }
-
-    /*public static void guardarEmpleados(ArrayList<Vendedor> listaVendedores) throws IOException {
-
-        String contenido = "";
-
-        for(Vendedor vendedor:listaVendedores)
-        {
-            contenido+= vendedor.getNombre()+","+vendedor.getApellido()+","+vendedor.getCedula()+","+vendedor.get()+"\n";
-        }
-        ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_EMPLEADOS, contenido, false);
-    }*/
-
-
-
+    
 //	----------------------LOADS------------------------
 
     /**
@@ -96,90 +83,22 @@ public class Persistencia {
         {
             linea = contenido.get(i);//juan,arias,125454,Armenia,uni1@,12454,125444
             Vendedor vendedor = new Vendedor("","","","","","");
-            vendedor.setNombre(linea.split(",")[0]);
-            vendedor.setApellido(linea.split(",")[1]);
-            vendedor.setCedula(linea.split(",")[2]);
-            vendedor.setDireccion(linea.split(",")[3]);
-            vendedor.getUser().setNombre(linea.split(",")[4]);
-            vendedor.setContra(linea.split(",")[5]);
+            vendedor.setNombre(linea.split("@@")[0]);
+            vendedor.setApellido(linea.split("@@")[1]);
+            vendedor.setCedula(linea.split("@@")[2]);
+            vendedor.setDireccion(linea.split("@@")[3]);
+            vendedor.getUser().setNombre(linea.split("@@")[4]);
+            vendedor.setContra(linea.split("@@")[5]);
             vendedores.add(vendedor);
         }
         return vendedores;
     }
-
-    /*
-    public static ArrayList<Vendedor> cargarEmpleados() throws FileNotFoundException, IOException {
-
-        ArrayList<Vendedor> empleados =new ArrayList<Vendedor>();
-
-        ArrayList<String> contenido = ArchivoUtil.leerArchivo(RUTA_ARCHIVO_EMPLEADOS);
-        String linea="";
-
-        for (int i = 0; i < contenido.size(); i++)
-        {
-            linea = contenido.get(i);
-            Empleado empleado = new Empleado();
-            empleado.setNombre(linea.split(",")[0]);
-            empleado.setApellido(linea.split(",")[1]);
-            empleado.setCedula(linea.split(",")[2]);
-            empleado.setFechaNacimiento(linea.split(",")[3]);
-            empleados.add(empleado);
-        }
-        return empleados;
-
-
-    }*/
-
 
 
 
     public static void guardaRegistroLog(String mensajeLog, int nivel, String accion) {
         ArchivoUtil.guardarRegistroLog(mensajeLog, nivel, accion, RUTA_ARCHIVO_LOG);
     }
-
-    /*
-    public static boolean iniciarSesion(String usuario, String contrasenia) throws FileNotFoundException, IOException, UsuarioExcepcion {
-
-        if(validarUsuario(usuario,contrasenia)) {
-            return true;
-        }else {
-            throw new UsuarioExcepcion("Usuario no existe");
-        }
-
-    }*/
-    /*
-    private static boolean validarUsuario(String usuario, String contrasenia) throws FileNotFoundException, IOException
-    {
-        ArrayList<Usuario> usuarios = Persistencia.cargarUsuarios(RUTA_ARCHIVO_USUARIOS);
-
-        for (int indiceUsuario = 0; indiceUsuario < usuarios.size(); indiceUsuario++)
-        {
-            Usuario usuarioAux = usuarios.get(indiceUsuario);
-            if(usuarioAux.getUsuario().equalsIgnoreCase(usuario) && usuarioAux.getContrasenia().equalsIgnoreCase(contrasenia)) {
-                return true;
-            }
-        }
-        return false;
-    }*/
-
-   /* public static ArrayList<Usuario> cargarUsuarios(String ruta) throws FileNotFoundException, IOException {
-        ArrayList<Usuario> usuarios =new ArrayList<Usuario>();
-
-        ArrayList<String> contenido = ArchivoUtil.leerArchivo(ruta);
-        String linea="";
-
-        for (int i = 0; i < contenido.size(); i++) {
-            linea = contenido.get(i);
-
-            Usuario usuario = new Usuario();
-            usuario.setUsuario(linea.split(",")[0]);
-            usuario.setContrasenia(linea.split(",")[1]);
-
-            usuarios.add(usuario);
-        }
-        return usuarios;
-    }*/
-
 
 //	----------------------SAVES------------------------
 
