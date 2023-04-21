@@ -1,11 +1,15 @@
 package co.edu.uniquindio.marketplace.model;
 
+import java.util.ArrayList;
+
 public class Vendedor extends Empleado{
     private  String contra;
     private String nombre;
     private String apellido;
     private String cedula;
     private String direccion;
+    private String descripcion;
+    private ArrayList<Producto> productos;
 
     public Vendedor(String nombre, String apellido, String cedula, String direccion, String user, String password){
          super(new Usuario(user, password));
@@ -15,6 +19,8 @@ public class Vendedor extends Empleado{
          this.cedula = cedula;
          this.direccion = direccion;
          contra = userNew.getPassword();
+         productos = new ArrayList<>();
+         this.descripcion = "";
      }
 
      public String getContra(){
@@ -65,5 +71,21 @@ public class Vendedor extends Empleado{
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public ArrayList<Producto> getProductos() {
+        return productos;
+    }
+
+    public String getDescripcion() {
+        if(this.descripcion.isEmpty()){
+            return "Añada una descipcion a su perfil...";
+        }else{
+            return descripcion;
+        }
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

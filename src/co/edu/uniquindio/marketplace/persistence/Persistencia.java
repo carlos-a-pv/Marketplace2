@@ -60,7 +60,7 @@ public class Persistencia {
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_VENDEDORES, contenido, false);
 
     }
-    
+
 //	----------------------LOADS------------------------
 
     /**

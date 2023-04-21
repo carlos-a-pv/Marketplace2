@@ -61,10 +61,8 @@ public class Marketplace {
         return vendedorEncontrado;
     }
     public Empleado autenticar (String user, String password) throws InicioSesionException {
-        Usuario usuarioAValidar = new Usuario(user, password);
-
-        Vendedor vendedor= vendedores.stream()
-                .filter( (vende)-> vende.getUser().getNombre().equals(user) && vende.getUser().getPassword().equals(password))
+        Vendedor vendedor = vendedores.stream()
+                .filter( (vende)-> vende.getUser().getNombre().equals(user) && vende.getContra().equals(password))
                 .findFirst()
                 .orElse(null);
 

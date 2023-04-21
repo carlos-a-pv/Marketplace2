@@ -64,11 +64,6 @@ public class AdministradorViewController {
         crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
         //tbVendedores.getItems().clear();
         tbVendedores.setItems(getListaVendedoresData());
-        //llenarTabla(getListaVendedoresData());
-        //inicializar datos en el tabla
-        //vendedores = (ObservableList<Vendedor>) modelFactoryController.getMarketplace().getVendedores();
-        //tbVendedores.setItems(vendedores);
-        //llenarTabla(modelFactoryController.getMarketplace().getVendedores());
         this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         this.colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         this.colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
@@ -105,6 +100,8 @@ public class AdministradorViewController {
         stage.initOwner(btnVolver.getScene().getWindow());
         btnVolver.getScene().getWindow().hide();
         stage.show();
+
+        modelFactoryController.registrarAccionesSistema("Se ha cerrado la sesion",1,"Cierre de la sesion");
     }
     @FXML
     public void onCrearVendedorClick(ActionEvent actionEvent) throws IOException {

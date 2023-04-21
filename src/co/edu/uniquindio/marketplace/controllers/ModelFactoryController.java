@@ -5,6 +5,7 @@ import co.edu.uniquindio.marketplace.exceptions.InicioSesionException;
 import co.edu.uniquindio.marketplace.exceptions.VendedorException;
 import co.edu.uniquindio.marketplace.model.Empleado;
 import co.edu.uniquindio.marketplace.model.Marketplace;
+import co.edu.uniquindio.marketplace.model.Producto;
 import co.edu.uniquindio.marketplace.model.Vendedor;
 import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import co.edu.uniquindio.marketplace.servicies.IModelFactoryService;
@@ -35,7 +36,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
         //2. Cargar los datos de los archivos
-		cargarDatosDesdeArchivos();
+		//cargarDatosDesdeArchivos();
 
 
         //3. Guardar y Cargar el recurso serializable binario
@@ -87,8 +88,9 @@ public class ModelFactoryController implements IModelFactoryService {
     private void inicializarDatos() {
         this.marketplace = new Marketplace();
         this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
+        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100"));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
-
+        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500"));
     }
     public void registrarAccionesSistema(String mensaje, int nivel, String accion) {
         Persistencia.guardaRegistroLog(mensaje, nivel, accion);
@@ -157,6 +159,10 @@ public class ModelFactoryController implements IModelFactoryService {
             registrarAccionesSistema("El usuario no existe en el sistema", 2, "inicio de sesion");
         }
         return empleado;
+    }
+
+    public  ArrayList<Producto> obtenerProductos(){
+        return getMarketplace().getVendedores().get(0).getProductos();
     }
 
 
