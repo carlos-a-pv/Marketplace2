@@ -1,5 +1,6 @@
 package co.edu.uniquindio.marketplace.model;
 
+import javax.sound.sampled.Port;
 import java.util.ArrayList;
 
 public class Vendedor extends Empleado{
@@ -21,6 +22,12 @@ public class Vendedor extends Empleado{
          contra = userNew.getPassword();
          productos = new ArrayList<>();
          this.descripcion = "";
+     }
+
+     public Producto crearProducto(String nombre, String precio, Categoria categoria){
+         Producto x = new Producto(nombre, precio, categoria);
+        getProductos().add(x);
+        return x;
      }
 
      public String getContra(){

@@ -6,9 +6,10 @@ public class Producto {
     private Categoria categoria;
     private Disponibilidad estado;
 
-    public Producto(String nombre, String precio){
+    public Producto(String nombre, String precio, Categoria categoria){
         this.nombre = nombre;
         this.precio = precio;
+        this.categoria = categoria;
         this.estado = Disponibilidad.DISPONIBLE;
     }
 

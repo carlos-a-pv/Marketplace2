@@ -7,7 +7,9 @@ import co.edu.uniquindio.marketplace.model.Vendedor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,12 +17,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VendedorViewController {
@@ -36,6 +40,7 @@ public class VendedorViewController {
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
+        Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
 
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
@@ -52,6 +57,7 @@ public class VendedorViewController {
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
+            TableColumn<Producto, Categoria> colCategoria = new TableColumn<>("categoria");
             TableColumn<Producto, Disponibilidad> colEstado = new TableColumn<>("Estado");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
             HBox hbox = new HBox(fotoUsuario, nombre,  descripcion2, btnEditar);
@@ -71,10 +77,10 @@ public class VendedorViewController {
             productos.setItems(convert(modelFactoryController.obtenerVendedores().get(i).getProductos()));
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
             colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
-            //this.colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
+            colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
             colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-            productos.getColumns().addAll(colNombre,colPrecio, colEstado);
+            productos.getColumns().addAll(colNombre,colPrecio, colCategoria,colEstado);
 
             Image img = new Image("/resources/edit.png");
             ImageView view = new ImageView(img);
@@ -88,6 +94,18 @@ public class VendedorViewController {
             tabPane.getTabs().add(tab);
 
             //acciones
+            btnPulicar.setOnMouseClicked((event -> {
+                try {
+                    publicarProducto();
+                    productos.getItems().clear();
+                    productos.setItems(getListaProductoData());
+                    productos.refresh();
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+
             btnEditar.setOnMouseClicked( event ->{
                 Stage dialog = new Stage();
                 //dialog.initModality(Modality.APPLICATION_MODAL);
@@ -127,6 +145,12 @@ public class VendedorViewController {
 
             });
 
+            if(!modelFactoryController.obtenerVendedores().get(i).equals(vendedorLogeado)){
+                btnCambiarImagen.setDisable(true);
+                btnEditar.setDisable(true);
+                btnPulicar.setDisable(true);
+                productos.setDisable(true);
+            }
 
         }
 /*
@@ -143,6 +167,16 @@ public class VendedorViewController {
                 System.out.println("Seleccion tab 2");
             }
         });*/
+    }
+
+    private void publicarProducto() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/formulario-producto.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+        Stage stage = new Stage();
+        stage.setTitle("CREAR PRODUCTO");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     public void OnCambiarFotoClick(ActionEvent actionEvent) {

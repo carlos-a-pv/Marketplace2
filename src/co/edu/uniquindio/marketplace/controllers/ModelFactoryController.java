@@ -3,10 +3,7 @@ package co.edu.uniquindio.marketplace.controllers;
 
 import co.edu.uniquindio.marketplace.exceptions.InicioSesionException;
 import co.edu.uniquindio.marketplace.exceptions.VendedorException;
-import co.edu.uniquindio.marketplace.model.Empleado;
-import co.edu.uniquindio.marketplace.model.Marketplace;
-import co.edu.uniquindio.marketplace.model.Producto;
-import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.model.*;
 import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import co.edu.uniquindio.marketplace.servicies.IModelFactoryService;
 
@@ -17,6 +14,7 @@ import java.util.ArrayList;
 public class ModelFactoryController implements IModelFactoryService {
 
     static Marketplace marketplace;
+    static Vendedor vendedorLogeado;
 
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
@@ -88,9 +86,9 @@ public class ModelFactoryController implements IModelFactoryService {
     private void inicializarDatos() {
         this.marketplace = new Marketplace();
         this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
-        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100"));
+        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
-        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500"));
+        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS));
     }
     public void registrarAccionesSistema(String mensaje, int nivel, String accion) {
         Persistencia.guardaRegistroLog(mensaje, nivel, accion);
@@ -149,6 +147,11 @@ public class ModelFactoryController implements IModelFactoryService {
         return getMarketplace().obtenerVendedores();
     }
 
+    @Override
+    public Producto crearProducto(String nombre, String precio, Categoria categoria) {
+        return vendedorLogeado.crearProducto(nombre, precio, categoria);
+    }
+
     public Empleado autenticar(String user, String password) {
         Empleado empleado = null;
         try {
@@ -158,6 +161,9 @@ public class ModelFactoryController implements IModelFactoryService {
             //e.printStackTrace();
             registrarAccionesSistema("El usuario no existe en el sistema", 2, "inicio de sesion");
         }
+        if(empleado != null){
+            vendedorLogeado = (Vendedor) empleado;
+        }
         return empleado;
     }
 
@@ -165,6 +171,7 @@ public class ModelFactoryController implements IModelFactoryService {
         return getMarketplace().getVendedores().get(0).getProductos();
     }
 
-
-
+    public static Vendedor getVendedorLogeado() {
+        return vendedorLogeado;
+    }
 }
