@@ -21,6 +21,9 @@ public class FormularioProductoViewController {
     @FXML
     private Button btnPublicar;
     @FXML
+    private Button btnCancelar;
+
+    @FXML
     private ComboBox<Categoria> cbCategoria;
 
     @FXML
@@ -73,6 +76,10 @@ public class FormularioProductoViewController {
     }
 
     public void onCancelarClick(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        stage.initOwner(btnCancelar.getScene().getWindow());
+        btnCancelar.getScene().getWindow().hide();
+
     }
 
     private void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {

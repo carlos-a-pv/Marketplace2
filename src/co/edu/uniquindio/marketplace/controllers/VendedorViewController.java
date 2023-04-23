@@ -33,14 +33,20 @@ public class VendedorViewController {
     ObservableList<Producto> listaProductosData = FXCollections.observableArrayList();
     @FXML
     private TabPane tabPane;
-
-
+    @FXML
+    private Button btnVolver1;
 
     @FXML
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
+
+        Image img2 = new Image("/resources/hacia-atras.png");
+        ImageView view2 = new ImageView(img2);
+        view2.setFitHeight(20);
+        view2.setPreserveRatio(true);
+        btnVolver1.setGraphic(view2);
 
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
@@ -54,13 +60,14 @@ public class VendedorViewController {
             Button btnCambiarImagen = new Button("Cambiar imagen");
             Button btnPulicar = new Button("publicar");
             Button btnEditar = new Button();
+            Button btnVolver = new Button();
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
             TableColumn<Producto, Categoria> colCategoria = new TableColumn<>("categoria");
             TableColumn<Producto, Disponibilidad> colEstado = new TableColumn<>("Estado");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
-            HBox hbox = new HBox(fotoUsuario, nombre,  descripcion2, btnEditar);
+            HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar);
 
             //Estilos
             content.setPadding(new Insets(20,20,20,20));
@@ -88,8 +95,14 @@ public class VendedorViewController {
             view.setPreserveRatio(true);
             btnEditar.setGraphic(view);
 
+            Image img1 = new Image("/resources/hacia-atras.png");
+            ImageView view1 = new ImageView(img1);
+            view1.setFitHeight(20);
+            view1.setPreserveRatio(true);
+            btnVolver.setGraphic(view1);
+
             //Add de componentes
-            content.getChildren().addAll( hbox,  btnCambiarImagen, productos, btnPulicar);
+            content.getChildren().addAll(hbox,  btnCambiarImagen, productos, btnPulicar);
             tab.setContent(content);
             tabPane.getTabs().add(tab);
 
@@ -104,6 +117,10 @@ public class VendedorViewController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }));
+
+            btnVolver.setOnMouseClicked((event -> {
+                volverAtras();
             }));
 
             btnEditar.setOnMouseClicked( event ->{
@@ -152,7 +169,19 @@ public class VendedorViewController {
                 productos.setDisable(true);
             }
 
+            productos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+                try {
+                    abrirVentanaInfo(newValue);
+                    //  productos.getSelectionModel().clearSelection();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
         }
+
+
 /*
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (newTab == tabVendedor1) {
@@ -167,6 +196,20 @@ public class VendedorViewController {
                 System.out.println("Seleccion tab 2");
             }
         });*/
+    }
+
+    private void volverAtras() {
+    }
+
+    private void abrirVentanaInfo(Producto x) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+        Stage stage = new Stage();
+        stage.setTitle("INFO PRODUCTO   ");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+
     }
 
     private void publicarProducto() throws IOException {

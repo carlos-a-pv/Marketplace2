@@ -161,7 +161,9 @@ public class ModelFactoryController implements IModelFactoryService {
             //e.printStackTrace();
             registrarAccionesSistema("El usuario no existe en el sistema", 2, "inicio de sesion");
         }
-        if(empleado != null){
+        if(empleado instanceof Administrador){
+            return empleado;
+        }else if(empleado != null){
             vendedorLogeado = (Vendedor) empleado;
         }
         return empleado;
