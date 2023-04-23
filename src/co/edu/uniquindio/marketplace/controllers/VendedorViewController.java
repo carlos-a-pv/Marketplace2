@@ -61,6 +61,7 @@ public class VendedorViewController {
             Button btnPulicar = new Button("publicar");
             Button btnEditar = new Button();
             Button btnVolver = new Button();
+            Button btnAddVendedor = new Button("Añadir a tus contactos");
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
@@ -102,7 +103,7 @@ public class VendedorViewController {
             btnVolver.setGraphic(view1);
 
             //Add de componentes
-            content.getChildren().addAll(hbox,  btnCambiarImagen, productos, btnPulicar);
+            content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPulicar);
             tab.setContent(content);
             tabPane.getTabs().add(tab);
 
@@ -167,6 +168,9 @@ public class VendedorViewController {
                 btnEditar.setDisable(true);
                 btnPulicar.setDisable(true);
                 productos.setDisable(true);
+
+            }else{
+                btnAddVendedor.setVisible(false);
             }
 
             productos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
