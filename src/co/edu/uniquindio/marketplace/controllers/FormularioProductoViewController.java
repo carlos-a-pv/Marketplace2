@@ -2,6 +2,7 @@
 package co.edu.uniquindio.marketplace.controllers;
 
 import co.edu.uniquindio.marketplace.model.Categoria;
+import co.edu.uniquindio.marketplace.model.Disponibilidad;
 import co.edu.uniquindio.marketplace.model.Producto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class FormularioProductoViewController {
     ModelFactoryController modelFactoryController;
@@ -25,22 +28,26 @@ public class FormularioProductoViewController {
 
     @FXML
     private ComboBox<Categoria> cbCategoria;
+    @FXML
+    private ComboBox<Disponibilidad> cbDisponible;
 
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         cbCategoria.getItems().setAll(Categoria.values());
+        cbDisponible.getItems().setAll(Disponibilidad.values());
     }
 
 
-    public void onPublicarClick(ActionEvent actionEvent) {
+    public void onPublicarClick(ActionEvent actionEvent) throws IOException {
         String nombre = tfNombre.getText();
         String precio = tfPrecio.getText();
         Categoria categoria = cbCategoria.getValue();
+        Disponibilidad disponibilidad = cbDisponible.getValue();
 
-        if(validarDatos(nombre, precio, categoria)){
-            Producto producto = crudProductoViewController.crearProducto(nombre, precio, categoria);
+        if(validarDatos(nombre, precio, categoria,disponibilidad)){
+            Producto producto = crudProductoViewController.crearProducto(nombre, precio, categoria,disponibilidad);
             if(producto != null){
                 mostrarMensaje("Creacion de producto", "Operacion existosa", "se ha creado el prodcuto con exito", Alert.AlertType.CONFIRMATION);
             }
@@ -53,7 +60,7 @@ public class FormularioProductoViewController {
         btnPublicar.getScene().getWindow().hide();
     }
 
-    private boolean validarDatos(String nombre, String precio, Categoria categoria) {
+    private boolean validarDatos(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad) {
         String mensaje = "";
 
         if(nombre == null || nombre.equals(""))
@@ -65,6 +72,8 @@ public class FormularioProductoViewController {
         if(categoria == null){
             mensaje += "La categoria es invalida \n";
         }
+        if (disponibilidad==null)
+            mensaje+= "la disponibilidad es invalida \n";
 
         if(mensaje.equals("")){
             return true;

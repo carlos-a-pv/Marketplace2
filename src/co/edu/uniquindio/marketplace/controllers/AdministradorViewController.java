@@ -22,7 +22,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-public class AdministradorViewController {
+public class
+AdministradorViewController {
     ModelFactoryController modelFactoryController;
     CrudVendedorViewController crudVendedorViewController;
     ObservableList<Vendedor> listaVendedoresData = FXCollections.observableArrayList();

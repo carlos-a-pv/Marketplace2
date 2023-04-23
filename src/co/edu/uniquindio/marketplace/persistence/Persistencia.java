@@ -1,8 +1,7 @@
 package co.edu.uniquindio.marketplace.persistence;
 
 
-import co.edu.uniquindio.marketplace.model.Marketplace;
-import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.model.*;
 
 import java.beans.XMLEncoder;
 import java.io.FileInputStream;
@@ -20,6 +19,7 @@ public class Persistencia {
 
     public static final String RUTA_ARCHIVO_VENDEDORES = "C://td//persistencia//archivos/archivoVendedores.txt";
     public static final String RUTA_ARCHIVO_LOG = "C://td//persistencia//log//BancoLog.txt";
+    public static final String RUTA_ARCHIVO_PRODUCTO ="C://td//Persistencia//Archivos/archivoProductos";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_BINARIO = "C://td//persistencia//model.dat";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
 
@@ -31,9 +31,13 @@ public class Persistencia {
 
         //cargar archivo de vendedores
         ArrayList<Vendedor> vendedoresCargador = cargarVendedores();
+        ArrayList<Producto> productosCargados = cargarProductos();
 
         if(vendedoresCargador.size() > 0)
             marketplace.getVendedores().addAll(vendedoresCargador);
+
+        if (productosCargados.size() > 0)
+            marketplace.getVendedorSeleccionado().getProductos().addAll(productosCargados);
 
         //cargar archivo objetos(productos)
 
@@ -59,6 +63,15 @@ public class Persistencia {
         }
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_VENDEDORES, contenido, false);
 
+    }
+    public static void guardarProductos(ArrayList<Producto>listProducto) throws IOException{
+        String contenido ="";
+
+        for (Producto producto:listProducto)
+        {
+            contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"\n";
+        }
+        ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_PRODUCTO,contenido,false);
     }
 
 //	----------------------LOADS------------------------
@@ -93,7 +106,26 @@ public class Persistencia {
         }
         return vendedores;
     }
+    public static ArrayList<Producto> cargarProductos()throws FileNotFoundException,IOException{
+        ArrayList<Producto> productos = new ArrayList<>();
+        ArrayList <String> contenido = ArchivoUtil.leerArchivo(RUTA_ARCHIVO_PRODUCTO);
+        if (contenido == null){
+            return null;
+        }
+        String linea = "";
 
+        for (int i = 0;i<contenido.size();i++){
+
+            linea = contenido.get(i);
+            Producto producto = new Producto("","",Categoria.valueOf(""),Disponibilidad.valueOf(""));
+            producto.setNombre(linea.split("@@")[0]);
+            producto.setPrecio(linea.split("@@")[1]);
+            producto.setCategoria(Categoria.valueOf(linea.split("@@")[2]));
+            producto.setDisponibilidad(Disponibilidad.valueOf(linea.split("@@")[3]));
+            productos.add(producto);
+         }
+            return  productos;
+    }
 
 
     public static void guardaRegistroLog(String mensajeLog, int nivel, String accion) {

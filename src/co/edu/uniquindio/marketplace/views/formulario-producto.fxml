@@ -19,13 +19,15 @@
       <Label layoutX="91.0" layoutY="118.0" prefHeight="25.0" prefWidth="72.0" text="Precio" />
       <TextField fx:id="tfPrecio" layoutX="252.0" layoutY="114.0" />
       <Label layoutX="91.0" layoutY="160.0" prefHeight="25.0" prefWidth="72.0" text="Categoria" />
+      <Label layoutX="91.0" layoutY="200.0" prefHeight="25.0" prefWidth="100.0" text="Disponibilidad" />
       <ComboBox fx:id="cbCategoria" layoutX="252.0" layoutY="160.0" prefWidth="150.0" />
-      <Button fx:id="btnPublicar" layoutX="146.0" layoutY="218.0" mnemonicParsing="false" onAction="#onPublicarClick" text="Publicar">
+      <ComboBox fx:id="cbDisponible" layoutX="252.0" layoutY="200.0" prefWidth="150.0" />
+      <Button fx:id="btnPublicar" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" onAction="#onPublicarClick" text="Publicar">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="btnCancelar" layoutX="251.0" layoutY="218.0" mnemonicParsing="false" onAction="#onCancelarClick" text="Cancelar">
+      <Button fx:id="btnCancelar" layoutX="251.0" layoutY="240.0" mnemonicParsing="false" onAction="#onCancelarClick" text="Cancelar">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
