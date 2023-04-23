@@ -14,7 +14,11 @@ import java.util.ArrayList;
 public class ModelFactoryController implements IModelFactoryService {
 
     static Marketplace marketplace;
-    static Vendedor vendedorLogeado;
+    static Vendedor vendedorLogeado ;
+
+    public void vendedorLogiado(Vendedor empleadoIniciado) {
+        vendedorLogeado = empleadoIniciado;
+    }
 
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
@@ -56,10 +60,12 @@ public class ModelFactoryController implements IModelFactoryService {
         inicializarSalvarDatos();
     }
 
+
     private static void inicializarSalvarDatos() {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
+            Persistencia.guardarProductos(vendedorLogeado.getProductos());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,7 +76,9 @@ public class ModelFactoryController implements IModelFactoryService {
         this.marketplace = new Marketplace();
         try {
             ArrayList<Vendedor> listaVendedores =new ArrayList<Vendedor>();
+            ArrayList<Producto> listProductos = new ArrayList<Producto>();
             listaVendedores = Persistencia.cargarVendedores();
+            listProductos = Persistencia.cargarProductos();
             if(listaVendedores != null){
                 getMarketplace().getVendedores().addAll(listaVendedores);
             }else{
@@ -86,9 +94,12 @@ public class ModelFactoryController implements IModelFactoryService {
     private void inicializarDatos() {
         this.marketplace = new Marketplace();
         this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
-        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS));
+        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
-        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS));
+        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
+        vendedorLogeado= marketplace.getVendedores().get(0);
+
+
     }
     public void registrarAccionesSistema(String mensaje, int nivel, String accion) {
         Persistencia.guardaRegistroLog(mensaje, nivel, accion);
@@ -147,10 +158,7 @@ public class ModelFactoryController implements IModelFactoryService {
         return getMarketplace().obtenerVendedores();
     }
 
-    @Override
-    public Producto crearProducto(String nombre, String precio, Categoria categoria) {
-        return vendedorLogeado.crearProducto(nombre, precio, categoria);
-    }
+
 
     public Empleado autenticar(String user, String password) {
         Empleado empleado = null;
@@ -172,8 +180,13 @@ public class ModelFactoryController implements IModelFactoryService {
     public  ArrayList<Producto> obtenerProductos(){
         return getMarketplace().getVendedores().get(0).getProductos();
     }
-
+    @Override
+    public Producto crearProducto(String nombre, String precio, Categoria categoria, Disponibilidad disponibilidad) {
+        inicializarSalvarDatos();
+        return vendedorLogeado.crearProducto(nombre, precio, categoria,disponibilidad);
+    }
     public static Vendedor getVendedorLogeado() {
         return vendedorLogeado;
     }
 }
+

@@ -24,8 +24,8 @@ public class Vendedor extends Empleado{
          this.descripcion = "";
      }
 
-     public Producto crearProducto(String nombre, String precio, Categoria categoria){
-         Producto x = new Producto(nombre, precio, categoria);
+     public Producto crearProducto(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad){
+         Producto x = new Producto(nombre, precio, categoria,disponibilidad);
         getProductos().add(x);
         return x;
      }

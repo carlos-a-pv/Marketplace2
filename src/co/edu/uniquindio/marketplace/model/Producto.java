@@ -6,11 +6,11 @@ public class Producto {
     private Categoria categoria;
     private Disponibilidad estado;
 
-    public Producto(String nombre, String precio, Categoria categoria){
+    public Producto(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad){
         this.nombre = nombre;
         this.precio = precio;
         this.categoria = categoria;
-        this.estado = Disponibilidad.DISPONIBLE;
+        this.estado = disponibilidad;
     }
 
     public String getNombre() {
