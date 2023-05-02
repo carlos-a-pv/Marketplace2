@@ -6,6 +6,7 @@ import co.edu.uniquindio.marketplace.exceptions.VendedorException;
 import co.edu.uniquindio.marketplace.model.*;
 import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import co.edu.uniquindio.marketplace.servicies.IModelFactoryService;
+import javafx.scene.control.Alert;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
         //2. Cargar los datos de los archivos
-		//cargarDatosDesdeArchivos();
+		cargarDatosDesdeArchivos();
 
 
         //3. Guardar y Cargar el recurso serializable binario
@@ -65,7 +66,7 @@ public class ModelFactoryController implements IModelFactoryService {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
-            Persistencia.guardarProductos(vendedorLogeado.getProductos());
+            //Persistencia.guardarProductos(vendedorLogeado.getProductos());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,9 +79,10 @@ public class ModelFactoryController implements IModelFactoryService {
             ArrayList<Vendedor> listaVendedores =new ArrayList<Vendedor>();
             ArrayList<Producto> listProductos = new ArrayList<Producto>();
             listaVendedores = Persistencia.cargarVendedores();
-            listProductos = Persistencia.cargarProductos();
+            //listProductos = Persistencia.cargarProductos();
             if(listaVendedores != null){
                 getMarketplace().getVendedores().addAll(listaVendedores);
+
             }else{
                 marketplace = null;
             }
@@ -97,7 +99,7 @@ public class ModelFactoryController implements IModelFactoryService {
         this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
         this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
-        vendedorLogeado= marketplace.getVendedores().get(0);
+        //vendedorLogeado= marketplace.getVendedores().get(0);
 
 
     }
@@ -185,8 +187,33 @@ public class ModelFactoryController implements IModelFactoryService {
         inicializarSalvarDatos();
         return vendedorLogeado.crearProducto(nombre, precio, categoria,disponibilidad);
     }
+
+    @Override
+    public Solicitud aceptarSolicitud(Solicitud solicitudSeleccionada) {
+        return vendedorLogeado.aceptarSolicitud(solicitudSeleccionada);
+    }
+
+    @Override
+    public boolean buscarVendedorAliado(Vendedor vendedorLogeado, Vendedor vendedorSeleccionado) {
+        Vendedor vendedorEncontrado = vendedorLogeado.getVendedoresAliados().stream().filter((vendedor)-> vendedor.equals(vendedorSeleccionado)).findFirst().orElse(null);
+
+        if(vendedorEncontrado != null){
+            return true;
+        }
+        return false;
+    }
+
     public static Vendedor getVendedorLogeado() {
         return vendedorLogeado;
+    }
+
+    public void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
+
+        Alert aler = new Alert(alertType);
+        aler.setTitle(titulo);
+        aler.setHeaderText(header);
+        aler.setContentText(contenido);
+        aler.showAndWait();
     }
 }
 

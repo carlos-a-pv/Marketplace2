@@ -26,7 +26,7 @@ public class
 AdministradorViewController {
     ModelFactoryController modelFactoryController;
     CrudVendedorViewController crudVendedorViewController;
-    ObservableList<Vendedor> listaVendedoresData = FXCollections.observableArrayList();
+        ObservableList<Vendedor> listaVendedoresData = FXCollections.observableArrayList();
 
     public AdministradorViewController( ){}
     public AdministradorViewController( ModelFactoryController modelFactoryController) {
@@ -94,7 +94,7 @@ AdministradorViewController {
     @FXML
     public void OnVolverClick(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 500);
         Stage stage = new Stage();
         stage.setTitle("LOGIN");
         stage.setScene(scene);

@@ -11,6 +11,9 @@ public class Vendedor extends Empleado{
     private String direccion;
     private String descripcion;
     private ArrayList<Producto> productos;
+    private ArrayList<Solicitud> solicitudesEnviadas;
+    private ArrayList<Solicitud> solicitudesRecibidas;
+    private ArrayList<Vendedor> vendedoresAliados;
 
     public Vendedor(String nombre, String apellido, String cedula, String direccion, String user, String password){
          super(new Usuario(user, password));
@@ -22,6 +25,9 @@ public class Vendedor extends Empleado{
          contra = userNew.getPassword();
          productos = new ArrayList<>();
          this.descripcion = "";
+         this.solicitudesEnviadas = new ArrayList<>();
+         this.solicitudesRecibidas = new ArrayList<>();
+         vendedoresAliados = new ArrayList<>();
      }
 
      public Producto crearProducto(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad){
@@ -52,12 +58,7 @@ public class Vendedor extends Empleado{
 
     @Override
     public String toString() {
-        return "Vendedor{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", cedula='" + cedula + '\'' +
-                ", direccion='" + direccion + '\'' +
-                '}';
+        return nombre;
     }
 
     public void setContra(String contra) {
@@ -94,5 +95,26 @@ public class Vendedor extends Empleado{
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public ArrayList<Solicitud> getSolicitudesEnviadas() {
+        return solicitudesEnviadas;
+    }
+
+    public ArrayList<Solicitud> getSolicitudesRecibidas() {
+        return solicitudesRecibidas;
+    }
+
+    public Solicitud aceptarSolicitud(Solicitud solicitud) {
+        Solicitud solicitudEncontrada = getSolicitudesRecibidas().stream().filter((soli)-> soli.equals(solicitud)).findFirst().orElse(null);
+        if(solicitudEncontrada != null){
+            solicitudEncontrada.setEstado(Estado.ACEPTADA);
+            return solicitudEncontrada;
+        }
+        return null;
+    }
+
+    public ArrayList<Vendedor> getVendedoresAliados() {
+        return vendedoresAliados;
     }
 }

@@ -1,9 +1,7 @@
 package co.edu.uniquindio.marketplace.controllers;
 
-import co.edu.uniquindio.marketplace.model.Categoria;
-import co.edu.uniquindio.marketplace.model.Disponibilidad;
-import co.edu.uniquindio.marketplace.model.Producto;
-import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.MainApp;
+import co.edu.uniquindio.marketplace.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,10 +29,9 @@ public class VendedorViewController {
     ModelFactoryController modelFactoryController;
     CrudProductoViewController crudProductoViewController;
     ObservableList<Producto> listaProductosData = FXCollections.observableArrayList();
+    Vendedor vendedorSeleccionado;
     @FXML
     private TabPane tabPane;
-    @FXML
-    private Button btnVolver1;
 
     @FXML
     void initialize() {
@@ -42,17 +39,18 @@ public class VendedorViewController {
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
 
-        Image img2 = new Image("/resources/hacia-atras.png");
+        /*Image img2 = new Image("/resources/hacia-atras.png");
         ImageView view2 = new ImageView(img2);
         view2.setFitHeight(20);
         view2.setPreserveRatio(true);
-        btnVolver1.setGraphic(view2);
+        btnVolver1.setGraphic(view2);*/
 
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
 
             //Creaccion de componentes
-            Tab tab = new Tab("Tab"+i);
+            Tab tab = new Tab("Vendedor:"+(i+1));
+            tab.setId(String.valueOf(i));
             VBox content = new VBox();
             Label nombre = new Label(modelFactoryController.obtenerVendedores().get(i).getNombre());
             ImageView fotoUsuario = new ImageView();
@@ -60,15 +58,16 @@ public class VendedorViewController {
             Button btnCambiarImagen = new Button("Cambiar imagen");
             Button btnPulicar = new Button("publicar");
             Button btnEditar = new Button();
-            Button btnVolver = new Button();
+            Button btnVolver = new Button("");
             Button btnAddVendedor = new Button("Añadir a tus contactos");
+            Button btnSolicitud = new Button();
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
             TableColumn<Producto, Categoria> colCategoria = new TableColumn<>("categoria");
             TableColumn<Producto, Disponibilidad> colEstado = new TableColumn<>("Estado");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
-            HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar);
+            HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar, btnSolicitud);
 
             //Estilos
             content.setPadding(new Insets(20,20,20,20));
@@ -96,11 +95,17 @@ public class VendedorViewController {
             view.setPreserveRatio(true);
             btnEditar.setGraphic(view);
 
-            Image img1 = new Image("/resources/hacia-atras.png");
+            Image img1 = new Image("/resources/cerrar-sesion.png");
             ImageView view1 = new ImageView(img1);
             view1.setFitHeight(20);
             view1.setPreserveRatio(true);
             btnVolver.setGraphic(view1);
+
+            Image img3 = new Image("/resources/amigos.png");
+            ImageView view3 = new ImageView(img3);
+            view3.setFitHeight(20);
+            view3.setPreserveRatio(true);
+            btnSolicitud.setGraphic(view3);
 
             //Add de componentes
             content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPulicar);
@@ -121,7 +126,23 @@ public class VendedorViewController {
             }));
 
             btnVolver.setOnMouseClicked((event -> {
-                volverAtras();
+                try {
+                    volverAtras(btnVolver);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+
+            btnAddVendedor.setOnMouseClicked((event -> {
+                if(modelFactoryController.buscarVendedorAliado(modelFactoryController.getVendedorLogeado(), vendedorSeleccionado)){
+                    modelFactoryController.mostrarMensaje("INFO","Ya eres aliado de este vendedor","", Alert.AlertType.INFORMATION);
+                    btnAddVendedor.setDisable(true);
+                }else{
+                    agregarVendedor();
+                    mostrarMensaje("SOLICITUD DE AMISTAD","INFO","Se ha enviado la solictud", Alert.AlertType.INFORMATION);
+                    btnAddVendedor.setText("Pendiente...");
+                    btnAddVendedor.setDisable(true);
+                }
             }));
 
             btnEditar.setOnMouseClicked( event ->{
@@ -163,11 +184,21 @@ public class VendedorViewController {
 
             });
 
+            btnSolicitud.setOnMouseClicked((event -> {
+                try {
+                    abrirVentanaSolicitud();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+
             if(!modelFactoryController.obtenerVendedores().get(i).equals(vendedorLogeado)){
                 btnCambiarImagen.setDisable(true);
                 btnEditar.setDisable(true);
                 btnPulicar.setDisable(true);
                 productos.setDisable(true);
+                btnSolicitud.setDisable(true);
+                btnVolver.setDisable(true);
 
             }else{
                 btnAddVendedor.setVisible(false);
@@ -185,31 +216,54 @@ public class VendedorViewController {
 
         }
 
-
-/*
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if (newTab == tabVendedor1) {
-                //inicializa la tabla en Tab1
-                //por ejemplo:
-                //
-                System.out.println("SELECCION TAB 1");
-            } else if (newTab == tabVendedor2) {
-                //inicializa la tabla en Tab2
-                //por ejemplo:
-                //table2.setItems(getDataForTable2());
-                System.out.println("Seleccion tab 2");
+            if(newTab.equals("tabMarketplace")){
+                //SE HA SELECCIONADO EL TAB DEL MARKETPLACE
+            }else {
+                try {
+                    int index = Integer.parseInt(newTab.getId());
+                    this.vendedorSeleccionado = modelFactoryController.obtenerVendedores().get(index);
+                    //System.out.println(vendedorSeleccionado.getNombre());
+                } catch (NumberFormatException e) {
+
+                }
             }
-        });*/
+        });
+
     }
 
-    private void volverAtras() {
+    private void agregarVendedor() {
+        Solicitud newSolicitud = new Solicitud(modelFactoryController.getVendedorLogeado(),vendedorSeleccionado);
+        vendedorSeleccionado.getSolicitudesRecibidas().add(newSolicitud);
+        modelFactoryController.getVendedorLogeado().getSolicitudesEnviadas().add(newSolicitud);
+    }
+
+    private void abrirVentanaSolicitud() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/solicitudes.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 420);
+        Stage stage = new Stage();
+        stage.setTitle("SOLICITUDES");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    private void volverAtras(Button btn) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 700, 500);
+        Stage stage = new Stage();
+        stage.setTitle("LOGIN");
+        stage.setScene(scene);
+        stage.initOwner(btn.getScene().getWindow());
+        btn.getScene().getWindow().hide();
+        stage.show();
     }
 
     private void abrirVentanaInfo(Producto x) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 350);
         Stage stage = new Stage();
-        stage.setTitle("INFO PRODUCTO   ");
+        stage.setTitle("SOLICITUDES");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
@@ -238,5 +292,14 @@ public class VendedorViewController {
         ObservableList<Producto> observableList = FXCollections.observableArrayList(arrayList);
         return observableList;
 
+    }
+
+    private void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
+
+        Alert aler = new Alert(alertType);
+        aler.setTitle(titulo);
+        aler.setHeaderText(header);
+        aler.setContentText(contenido);
+        aler.showAndWait();
     }
 }
