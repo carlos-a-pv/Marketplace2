@@ -25,18 +25,14 @@ public class FormularioProductoViewController {
     private Button btnPublicar;
     @FXML
     private Button btnCancelar;
-
     @FXML
     private ComboBox<Categoria> cbCategoria;
-    @FXML
-    private ComboBox<Disponibilidad> cbDisponible;
-
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         cbCategoria.getItems().setAll(Categoria.values());
-        cbDisponible.getItems().setAll(Disponibilidad.values());
+
     }
 
 
@@ -44,10 +40,9 @@ public class FormularioProductoViewController {
         String nombre = tfNombre.getText();
         String precio = tfPrecio.getText();
         Categoria categoria = cbCategoria.getValue();
-        Disponibilidad disponibilidad = cbDisponible.getValue();
 
-        if(validarDatos(nombre, precio, categoria,disponibilidad)){
-            Producto producto = crudProductoViewController.crearProducto(nombre, precio, categoria,disponibilidad);
+        if(validarDatos(nombre, precio, categoria)){
+            Producto producto = crudProductoViewController.crearProducto(nombre, precio, categoria);
             if(producto != null){
                 mostrarMensaje("Creacion de producto", "Operacion existosa", "se ha creado el prodcuto con exito", Alert.AlertType.CONFIRMATION);
             }
@@ -60,7 +55,7 @@ public class FormularioProductoViewController {
         btnPublicar.getScene().getWindow().hide();
     }
 
-    private boolean validarDatos(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad) {
+    private boolean validarDatos(String nombre, String precio, Categoria categoria) {
         String mensaje = "";
 
         if(nombre == null || nombre.equals(""))
@@ -72,8 +67,6 @@ public class FormularioProductoViewController {
         if(categoria == null){
             mensaje += "La categoria es invalida \n";
         }
-        if (disponibilidad==null)
-            mensaje+= "la disponibilidad es invalida \n";
 
         if(mensaje.equals("")){
             return true;

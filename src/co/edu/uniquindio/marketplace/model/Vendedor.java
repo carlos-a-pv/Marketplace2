@@ -23,15 +23,15 @@ public class Vendedor extends Empleado{
          this.cedula = cedula;
          this.direccion = direccion;
          contra = userNew.getPassword();
-         productos = new ArrayList<>();
          this.descripcion = "";
          this.solicitudesEnviadas = new ArrayList<>();
          this.solicitudesRecibidas = new ArrayList<>();
+         productos = new ArrayList<>();
          vendedoresAliados = new ArrayList<>();
      }
 
-     public Producto crearProducto(String nombre, String precio, Categoria categoria,Disponibilidad disponibilidad){
-         Producto x = new Producto(nombre, precio, categoria,disponibilidad);
+     public Producto crearProducto(String nombre, String precio, Categoria categoria ){
+        Producto x = new Producto(nombre, precio, categoria);
         getProductos().add(x);
         return x;
      }

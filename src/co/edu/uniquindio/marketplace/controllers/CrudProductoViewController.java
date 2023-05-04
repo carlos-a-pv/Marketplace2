@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,11 +21,11 @@ public class CrudProductoViewController {
 
     }
 
-    public ArrayList<Producto> obtenerProductos() {
+    public ArrayList<Producto> obtenerProductos() throws IOException {
         return modelFactoryController.obtenerProductos();
     }
 
-    public Producto crearProducto(String nombre, String precio, Categoria categoria, Disponibilidad disponibilidad) {
-        return modelFactoryController.crearProducto(nombre, precio, categoria,disponibilidad);
+    public Producto crearProducto(String nombre, String precio, Categoria categoria ) {
+        return modelFactoryController.crearProducto(nombre, precio, categoria);
     }
 }

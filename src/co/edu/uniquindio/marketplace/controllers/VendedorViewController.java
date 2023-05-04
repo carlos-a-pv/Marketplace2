@@ -56,7 +56,7 @@ public class VendedorViewController {
             ImageView fotoUsuario = new ImageView();
             Image image = new Image(getClass().getResourceAsStream("/resources/usuario.png"));
             Button btnCambiarImagen = new Button("Cambiar imagen");
-            Button btnPulicar = new Button("publicar");
+            Button btnPublicar = new Button("publicar");
             Button btnEditar = new Button();
             Button btnVolver = new Button("");
             Button btnAddVendedor = new Button("Añadir a tus contactos");
@@ -66,6 +66,7 @@ public class VendedorViewController {
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
             TableColumn<Producto, Categoria> colCategoria = new TableColumn<>("categoria");
             TableColumn<Producto, Disponibilidad> colEstado = new TableColumn<>("Estado");
+            TableColumn<Producto, Disponibilidad> colId = new TableColumn<>("ID");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
             HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar, btnSolicitud);
 
@@ -86,8 +87,9 @@ public class VendedorViewController {
             colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
             colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
             colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+            colId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
 
-            productos.getColumns().addAll(colNombre,colPrecio, colCategoria,colEstado);
+            productos.getColumns().addAll(colNombre,colPrecio, colCategoria,colEstado, colId);
 
             Image img = new Image("/resources/edit.png");
             ImageView view = new ImageView(img);
@@ -108,12 +110,12 @@ public class VendedorViewController {
             btnSolicitud.setGraphic(view3);
 
             //Add de componentes
-            content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPulicar);
+            content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPublicar);
             tab.setContent(content);
             tabPane.getTabs().add(tab);
 
             //acciones
-            btnPulicar.setOnMouseClicked((event -> {
+            btnPublicar.setOnMouseClicked((event -> {
                 try {
                     publicarProducto();
                     productos.getItems().clear();
@@ -195,7 +197,7 @@ public class VendedorViewController {
             if(!modelFactoryController.obtenerVendedores().get(i).equals(vendedorLogeado)){
                 btnCambiarImagen.setDisable(true);
                 btnEditar.setDisable(true);
-                btnPulicar.setDisable(true);
+                btnPublicar.setDisable(true);
                 productos.setDisable(true);
                 btnSolicitud.setDisable(true);
                 btnVolver.setDisable(true);
@@ -283,7 +285,7 @@ public class VendedorViewController {
     public void OnCambiarFotoClick(ActionEvent actionEvent) {
     }
 
-    public ObservableList<Producto> getListaProductoData() {
+    public ObservableList<Producto> getListaProductoData() throws IOException {
         listaProductosData.addAll(crudProductoViewController.obtenerProductos());
         return listaProductosData;
     }

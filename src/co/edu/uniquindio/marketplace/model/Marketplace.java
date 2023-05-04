@@ -14,7 +14,6 @@ public class Marketplace {
     public Marketplace(){
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
-
     }
     public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
         Vendedor nuevoVendedor = null;

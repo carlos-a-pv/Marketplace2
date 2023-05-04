@@ -13,7 +13,7 @@ public interface IModelFactoryService {
     boolean actualizarVendedor(String cedulaActual, String nombre, String apellido, String cedula, String direccion, String user, String password);
     public ArrayList<Vendedor> obtenerVendedores();
 
-    Producto crearProducto(String nombre, String precio, Categoria categoria, Disponibilidad disponibilidad);
+    Producto crearProducto(String nombre, String precio, Categoria categoria);
 
     Solicitud aceptarSolicitud(Solicitud solicitudSeleccionada);
 

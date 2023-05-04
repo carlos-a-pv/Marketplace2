@@ -19,7 +19,7 @@ public class Persistencia {
 
     public static final String RUTA_ARCHIVO_VENDEDORES = "C://td//persistencia//archivos/archivoVendedores.txt";
     public static final String RUTA_ARCHIVO_LOG = "C://td//persistencia//log//BancoLog.txt";
-    public static final String RUTA_ARCHIVO_PRODUCTO ="C://td//Persistencia//Archivos/archivoProductos";
+    public static final String RUTA_ARCHIVO_PRODUCTO ="C://td//Persistencia//Archivos/archivoProductos.txt";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_BINARIO = "C://td//persistencia//model.dat";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
 
@@ -64,15 +64,33 @@ public class Persistencia {
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_VENDEDORES, contenido, false);
 
     }
-    public static void guardarProductos(ArrayList<Producto>listProducto) throws IOException{
+    public static void guardarProductos(ArrayList<Producto>listProducto, Vendedor vendedorLogeado) throws IOException{
         String contenido ="";
 
-        for (Producto producto:listProducto)
-        {
-            contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"\n";
+        for (Producto producto:listProducto) {
+            if(!estaEnArchivo(producto)){
+                contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"@@"+producto.getIdProducto()+"@@"+vendedorLogeado.getNombre()+"\n";
+            }
         }
-        ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_PRODUCTO,contenido,false);
+        ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_PRODUCTO,contenido,true);
     }
+
+    private static boolean estaEnArchivo(Producto producto) throws IOException {
+        ArrayList<Producto> productos = Persistencia.cargarProductos();
+        if(productos == null){
+            return false;
+        }else{
+            Producto productoEncontrado = productos.stream().filter((product)-> product.getIdProducto().equals(producto.getIdProducto())).findFirst().orElse(null);
+
+            if(productoEncontrado == null){
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+    }
+
 
 //	----------------------LOADS------------------------
 
@@ -117,14 +135,15 @@ public class Persistencia {
         for (int i = 0;i<contenido.size();i++){
 
             linea = contenido.get(i);
-            Producto producto = new Producto("","",Categoria.valueOf(""),Disponibilidad.valueOf(""));
+            Producto producto = new Producto("","",null);
             producto.setNombre(linea.split("@@")[0]);
             producto.setPrecio(linea.split("@@")[1]);
-            producto.setCategoria(Categoria.valueOf(linea.split("@@")[2]));
+            producto.setCategoria(Categoria.valueOf(String.valueOf(linea.split("@@")[2])));
             producto.setDisponibilidad(Disponibilidad.valueOf(linea.split("@@")[3]));
+            producto.setIdProducto(linea.split("@@")[4]);
             productos.add(producto);
          }
-            return  productos;
+        return  productos;
     }
 
 

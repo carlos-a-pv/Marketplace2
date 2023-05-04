@@ -39,7 +39,8 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
         //2. Cargar los datos de los archivos
-		cargarDatosDesdeArchivos();
+		cargarVendedoresDesdeArchivos();
+        cargarProdcutoDesdeArchivos();
 
 
         //3. Guardar y Cargar el recurso serializable binario
@@ -61,23 +62,34 @@ public class ModelFactoryController implements IModelFactoryService {
         inicializarSalvarDatos();
     }
 
+    private void cargarProdcutoDesdeArchivos() {
+        try{
+
+            Persistencia.cargarProductos();
+        }catch (IOException e){
+
+        }
+    }
+
 
     private static void inicializarSalvarDatos() {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
-            //Persistencia.guardarProductos(vendedorLogeado.getProductos());
+            if(vendedorLogeado != null){
+                Persistencia.guardarProductos(vendedorLogeado.getProductos(), vendedorLogeado);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void cargarDatosDesdeArchivos() {
+    private void cargarVendedoresDesdeArchivos() {
         this.marketplace = new Marketplace();
         try {
-            ArrayList<Vendedor> listaVendedores =new ArrayList<Vendedor>();
-            ArrayList<Producto> listProductos = new ArrayList<Producto>();
+            ArrayList<Vendedor> listaVendedores;
+            //ArrayList<Producto> listProductos = new ArrayList<Producto>();
             listaVendedores = Persistencia.cargarVendedores();
             //listProductos = Persistencia.cargarProductos();
             if(listaVendedores != null){
@@ -96,9 +108,9 @@ public class ModelFactoryController implements IModelFactoryService {
     private void inicializarDatos() {
         this.marketplace = new Marketplace();
         this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
-        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
+        this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
-        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS,Disponibilidad.DISPONIBLE));
+        this.marketplace.getVendedores().get(1).getProductos().add(new Producto("moto","2500", Categoria.VEHICULOS));
         //vendedorLogeado= marketplace.getVendedores().get(0);
 
 
@@ -179,13 +191,14 @@ public class ModelFactoryController implements IModelFactoryService {
         return empleado;
     }
 
-    public  ArrayList<Producto> obtenerProductos(){
-        return getMarketplace().getVendedores().get(0).getProductos();
+    public  ArrayList<Producto> obtenerProductos() throws IOException {
+        return Persistencia.cargarProductos();
     }
     @Override
-    public Producto crearProducto(String nombre, String precio, Categoria categoria, Disponibilidad disponibilidad) {
+    public Producto crearProducto(String nombre, String precio, Categoria categoria) {
+        Producto productoCreado =  vendedorLogeado.crearProducto(nombre, precio, categoria);
         inicializarSalvarDatos();
-        return vendedorLogeado.crearProducto(nombre, precio, categoria,disponibilidad);
+        return productoCreado;
     }
 
     @Override
