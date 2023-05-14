@@ -49,7 +49,6 @@ public class FormularioProductoViewController {
         }else{
             mostrarMensaje("Datos invalidos", "Error en los datos","llene todos los campos", Alert.AlertType.INFORMATION);
         }
-
         Stage stage = new Stage();
         stage.initOwner(btnPublicar.getScene().getWindow());
         btnPublicar.getScene().getWindow().hide();

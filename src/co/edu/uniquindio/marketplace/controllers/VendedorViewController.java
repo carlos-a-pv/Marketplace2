@@ -50,7 +50,7 @@ public class VendedorViewController {
 
             //Creaccion de componentes
             Tab tab = new Tab("Vendedor:"+(i+1));
-            tab.setId(String.valueOf(i));
+            tab.setId(String.valueOf(i+1));
             VBox content = new VBox();
             Label nombre = new Label(modelFactoryController.obtenerVendedores().get(i).getNombre());
             ImageView fotoUsuario = new ImageView();
@@ -69,6 +69,7 @@ public class VendedorViewController {
             TableColumn<Producto, Disponibilidad> colId = new TableColumn<>("ID");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
             HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar, btnSolicitud);
+
 
             //Estilos
             content.setPadding(new Insets(20,20,20,20));
@@ -218,14 +219,18 @@ public class VendedorViewController {
 
         }
 
+        //Funcionalidad para posicionar el focus directamente en el vendedor logeado
+        int indice = buscarVendedorLogeado(vendedorLogeado);
+        tabPane.getSelectionModel().select(indice+1);
+
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if(newTab.equals("tabMarketplace")){
                 //SE HA SELECCIONADO EL TAB DEL MARKETPLACE
             }else {
                 try {
-                    int index = Integer.parseInt(newTab.getId());
+                    int index = Integer.parseInt(newTab.getId())-1;
                     this.vendedorSeleccionado = modelFactoryController.obtenerVendedores().get(index);
-                    //System.out.println(vendedorSeleccionado.getNombre());
+                    System.out.println(vendedorSeleccionado.getNombre());
                 } catch (NumberFormatException e) {
 
                 }
@@ -303,5 +308,16 @@ public class VendedorViewController {
         aler.setHeaderText(header);
         aler.setContentText(contenido);
         aler.showAndWait();
+    }
+
+    private int buscarVendedorLogeado(Vendedor vendedorLogeado){
+        ArrayList<Vendedor> vendedores = modelFactoryController.obtenerVendedores();
+
+        for(Vendedor vende : vendedores){
+            if(vende.equals(vendedorLogeado)){
+                return vendedores.indexOf(vende);
+            }
+        }
+        return 0;
     }
 }
