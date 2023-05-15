@@ -65,8 +65,6 @@ public class FormularioVendedorViewController {
         Stage stage = new Stage();
         stage.initOwner(btnCrearVendedor.getScene().getWindow());
         btnCrearVendedor.getScene().getWindow().hide();
-
-
     }
 
     private void limpiarCampos() {

@@ -47,17 +47,12 @@ public class VendedorInfoController {
         tfDireccion.setText(vendedorSeleccionado.getDireccion());
         tfUser.setText(vendedorSeleccionado.getUser().getNombre());
         tfPassword.setText(vendedorSeleccionado.getContra());
-
-
     }
-
     public void onEliminarVendedorClick(ActionEvent actionEvent) {
         eliminarEmpleado();
 
-
     }
     private void eliminarEmpleado(){
-
 
         boolean vendedorEliminado = false;
         if(vendedorSeleccionado != null){
