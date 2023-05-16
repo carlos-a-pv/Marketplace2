@@ -64,24 +64,24 @@ public class VendedorViewController {
         modelFactoryController = ModelFactoryController.getInstance();
         crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
 
-        tbVendedores.setItems(getListaVendedoresData());
-        this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        this.colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
-        this.colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
-        this.colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
-        this.colUser.setCellValueFactory(new PropertyValueFactory<>("user"));
-        this.colPassword.setCellValueFactory(new PropertyValueFactory<>("contra"));
+        //tbVendedores.setItems(getListaVendedoresData());
+        //this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        //this.colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
+        //this.colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
+        //this.colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        //this.colUser.setCellValueFactory(new PropertyValueFactory<>("user"));
+        //this.colPassword.setCellValueFactory(new PropertyValueFactory<>("contra"));
 
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
-
-        /*Image img2 = new Image("/resources/hacia-atras.png");
-        ImageView view2 = new ImageView(img2);
-        view2.setFitHeight(20);
-        view2.setPreserveRatio(true);
-        btnVolver1.setGraphic(view2);*/
-
+        /*
+        Image img10 = new Image("/resources/cerrar-sesion.png");
+        ImageView view10 = new ImageView(img10);
+        view10.setFitHeight(20);
+        view10.setPreserveRatio(true);
+        btnVolver.setGraphic(view10);
+*/
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
 
@@ -257,8 +257,14 @@ public class VendedorViewController {
 
 
         //Funcionalidad para posicionar el focus directamente en el vendedor logeado
+
         int indice = buscarVendedorLogeado(vendedorLogeado);
-        tabPane.getSelectionModel().select(indice+1);
+        if(indice == 0){
+            tabPane.getSelectionModel().select(0);
+        }else{
+            tabPane.getSelectionModel().select(indice);
+        }
+
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if(newTab.equals("tabMarketplace")){
