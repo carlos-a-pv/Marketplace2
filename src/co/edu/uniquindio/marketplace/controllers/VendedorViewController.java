@@ -2,7 +2,6 @@ package co.edu.uniquindio.marketplace.controllers;
 
 import co.edu.uniquindio.marketplace.MainApp;
 import co.edu.uniquindio.marketplace.model.*;
-import com.sun.webkit.Timer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,8 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class VendedorViewController {
-    ObservableList<Vendedor> listaVendedoresData = FXCollections.observableArrayList();
-    CrudVendedorViewController crudVendedorViewController;
     ModelFactoryController modelFactoryController;
     CrudProductoViewController crudProductoViewController;
     ObservableList<Producto> listaProductosData = FXCollections.observableArrayList();
@@ -37,51 +34,17 @@ public class VendedorViewController {
     private TabPane tabPane;
 
     @FXML
-    private Button btnVolver;
-    @FXML
-    private TableView tbVendedores;
-    @FXML
-    private TableColumn<Vendedor, String> colNombre;
-    @FXML
-    private TableColumn<Vendedor, String> colApellido;
-    @FXML
-    private TableColumn<Vendedor, String> colCedula;
-    @FXML
-    private TableColumn<Vendedor, String> colDireccion;
-    @FXML
-    private TableColumn<Vendedor, String> colUser;
-    @FXML
-    private TableColumn<Vendedor, String> colPassword;
-    @FXML
-    private TextField tfBuscar;
-    @FXML
-    private Button btnBuscar;
-    @FXML
-    private Button btnCrearVendedor;
-
-    @FXML
     void initialize() {
-        modelFactoryController = ModelFactoryController.getInstance();
-        crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
-
-        //tbVendedores.setItems(getListaVendedoresData());
-        //this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        //this.colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
-        //this.colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
-        //this.colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
-        //this.colUser.setCellValueFactory(new PropertyValueFactory<>("user"));
-        //this.colPassword.setCellValueFactory(new PropertyValueFactory<>("contra"));
-
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
-        /*
-        Image img10 = new Image("/resources/cerrar-sesion.png");
-        ImageView view10 = new ImageView(img10);
-        view10.setFitHeight(20);
-        view10.setPreserveRatio(true);
-        btnVolver.setGraphic(view10);
-*/
+
+        /*Image img2 = new Image("/resources/hacia-atras.png");
+        ImageView view2 = new ImageView(img2);
+        view2.setFitHeight(20);
+        view2.setPreserveRatio(true);
+        btnVolver1.setGraphic(view2);*/
+
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
 
@@ -96,7 +59,7 @@ public class VendedorViewController {
             Button btnPublicar = new Button("publicar");
             Button btnEditar = new Button();
             Button btnVolver = new Button("");
-            Button btnAddVendedor = new Button("Añadir a tus contactos");
+            Button btnAddVendedor = new Button();
             Button btnSolicitud = new Button();
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
@@ -118,6 +81,10 @@ public class VendedorViewController {
             descripcion2.setPrefWidth(400);
             descripcion2.setPrefHeight(500);
             descripcion2.setDisable(true);
+
+            btnAddVendedor.setPrefWidth(50);
+            btnAddVendedor.setPrefHeight(50);
+
             //VBox.setMargin(button, new Insets(10));
             //Setting
             productos.setItems(convert(modelFactoryController.obtenerVendedores().get(i).getProductos()));
@@ -146,6 +113,12 @@ public class VendedorViewController {
             view3.setFitHeight(20);
             view3.setPreserveRatio(true);
             btnSolicitud.setGraphic(view3);
+
+            Image img4 = new Image("/resources/agregar-usuario.png");
+            ImageView view4 = new ImageView(img4);
+            view4.setFitHeight(20);
+            view4.setPreserveRatio(true);
+            btnAddVendedor.setGraphic(view4);
 
             //Add de componentes
             content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPublicar);
@@ -246,25 +219,19 @@ public class VendedorViewController {
 
             productos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
                 try {
-                    abrirVentanaProductoInfo(newValue);
+                    abrirVentanaInfo(newValue);
                     //  productos.getSelectionModel().clearSelection();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
 
             });
-        }
 
+        }
 
         //Funcionalidad para posicionar el focus directamente en el vendedor logeado
-
         int indice = buscarVendedorLogeado(vendedorLogeado);
-        if(indice == 0){
-            tabPane.getSelectionModel().select(0);
-        }else{
-            tabPane.getSelectionModel().select(indice);
-        }
-
+        tabPane.getSelectionModel().select(indice+1);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if(newTab.equals("tabMarketplace")){
@@ -309,14 +276,15 @@ public class VendedorViewController {
         stage.show();
     }
 
-    private void abrirVentanaProductoInfo(Producto x) throws IOException {
+    private void abrirVentanaInfo(Producto x) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 350);
         Stage stage = new Stage();
-        stage.setTitle("INFO DEL PRODUCTO");
+        stage.setTitle("INFO PRODUCTO");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+
     }
 
     private void publicarProducto() throws IOException {
@@ -344,6 +312,7 @@ public class VendedorViewController {
     }
 
     private void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
+
         Alert aler = new Alert(alertType);
         aler.setTitle(titulo);
         aler.setHeaderText(header);
@@ -353,24 +322,12 @@ public class VendedorViewController {
 
     private int buscarVendedorLogeado(Vendedor vendedorLogeado){
         ArrayList<Vendedor> vendedores = modelFactoryController.obtenerVendedores();
+
         for(Vendedor vende : vendedores){
             if(vende.equals(vendedorLogeado)){
                 return vendedores.indexOf(vende);
             }
         }
         return 0;
-    }
-
-    public void onCrearVendedorClick(ActionEvent actionEvent) {
-    }
-
-    public void onBuscarClick(ActionEvent actionEvent) {
-    }
-
-    public void OnVolverClick(ActionEvent actionEvent) {
-    }
-    public ObservableList<Vendedor> getListaVendedoresData() {
-        listaVendedoresData.addAll(crudVendedorViewController.obtenerVendedores());
-        return listaVendedoresData;
     }
 }
