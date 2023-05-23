@@ -4,13 +4,16 @@ import co.edu.uniquindio.marketplace.MainApp;
 import co.edu.uniquindio.marketplace.model.Administrador;
 import co.edu.uniquindio.marketplace.model.Empleado;
 import co.edu.uniquindio.marketplace.model.Vendedor;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class LoginViewController {
@@ -40,25 +43,26 @@ public class LoginViewController {
             if (empleadoIniciado instanceof Administrador){
                 modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario Admin", 1, "inicioSesión");
 
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/principal-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 700, 700);
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
                 Stage stage = new Stage();
                 stage.setTitle("ADMINISTRADOR");
                 stage.setScene(scene);
+                //stage.setFullScreen(true);
                 stage.initOwner(btnLogin.getScene().getWindow());
                 btnLogin.getScene().getWindow().hide();
                 stage.show();
-                modelFactoryController.usuarioLogeado((Vendedor)empleadoIniciado);
 
             }else if(empleadoIniciado instanceof Vendedor){
                 String usuario = ((Vendedor) empleadoIniciado).getNombre();
-                modelFactoryController.usuarioLogeado((Vendedor)empleadoIniciado);
+                modelFactoryController.vendedorLogiado((Vendedor)empleadoIniciado);
                 modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario: "+usuario, 1, "inicioSesión");
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/principal-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 700, 700);
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
                 Stage stage = new Stage();
                 stage.setTitle("VENDEDOR");
                 stage.setScene(scene);
+                //stage.setFullScreen(true);
                 stage.initOwner(btnLogin.getScene().getWindow());
                 btnLogin.getScene().getWindow().hide();
                 stage.show();

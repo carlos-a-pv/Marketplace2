@@ -9,6 +9,7 @@ import java.util.List;
 public class Marketplace {
     private Administrador admin;
     private Vendedor vendedorSeleccionado;
+    private Producto productoSeleccionado;
     private ArrayList<Vendedor> vendedores;
 
     public Marketplace(){
@@ -121,5 +122,13 @@ public class Marketplace {
 
     public ArrayList<Vendedor> obtenerVendedores() {
         return getVendedores();
+    }
+
+    public Producto getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
     }
 }

@@ -15,11 +15,11 @@ import java.util.ArrayList;
 public class ModelFactoryController implements IModelFactoryService {
 
     static Marketplace marketplace;
-    static Vendedor usuarioLogeado ;
+    static Vendedor vendedorLogeado ;
+    static Producto productoSeleccionado;
+    static Vendedor vendedorSeleccionado;
 
-    public void usuarioLogeado(Vendedor empleadoIniciado) {
-        usuarioLogeado = empleadoIniciado;
-    }
+
 
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
@@ -76,8 +76,8 @@ public class ModelFactoryController implements IModelFactoryService {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
-            if(usuarioLogeado != null){
-                Persistencia.guardarProductos(usuarioLogeado.getProductos(), usuarioLogeado);
+            if(vendedorLogeado != null){
+                Persistencia.guardarProductos(vendedorLogeado.getProductos(), vendedorLogeado);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,7 +186,7 @@ public class ModelFactoryController implements IModelFactoryService {
         if(empleado instanceof Administrador){
             return empleado;
         }else if(empleado != null){
-            usuarioLogeado = (Vendedor) empleado;
+            vendedorLogeado = (Vendedor) empleado;
         }
         return empleado;
     }
@@ -196,14 +196,14 @@ public class ModelFactoryController implements IModelFactoryService {
     }
     @Override
     public Producto crearProducto(String nombre, String precio, Categoria categoria) {
-        Producto productoCreado =  usuarioLogeado.crearProducto(nombre, precio, categoria);
+        Producto productoCreado =  vendedorLogeado.crearProducto(nombre, precio, categoria);
         inicializarSalvarDatos();
         return productoCreado;
     }
 
     @Override
     public Solicitud aceptarSolicitud(Solicitud solicitudSeleccionada) {
-        return usuarioLogeado.aceptarSolicitud(solicitudSeleccionada);
+        return vendedorLogeado.aceptarSolicitud(solicitudSeleccionada);
     }
 
     @Override
@@ -216,9 +216,7 @@ public class ModelFactoryController implements IModelFactoryService {
         return false;
     }
 
-    public static Vendedor getVendedorLogeado() {
-        return usuarioLogeado;
-    }
+
 
     public void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
 
@@ -227,6 +225,20 @@ public class ModelFactoryController implements IModelFactoryService {
         aler.setHeaderText(header);
         aler.setContentText(contenido);
         aler.showAndWait();
+    }
+
+    public static Vendedor getVendedorSeleccionado() {
+        return vendedorSeleccionado;
+    }
+
+    public static void setVendedorSeleccionado(Vendedor vende) {
+        vendedorSeleccionado = vende;
+    }
+    public void vendedorLogiado(Vendedor empleadoIniciado) {
+        vendedorLogeado = empleadoIniciado;
+    }
+    public static Vendedor getVendedorLogeado() {
+        return vendedorLogeado;
     }
 }
 

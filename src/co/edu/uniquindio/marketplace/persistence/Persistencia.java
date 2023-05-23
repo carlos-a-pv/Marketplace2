@@ -69,7 +69,7 @@ public class Persistencia {
 
         for (Producto producto:listProducto) {
             if(!estaEnArchivo(producto)){
-                contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"@@"+producto.getIdProducto()+"@@"+vendedorLogeado.getNombre()+"\n";
+                contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"@@"+producto.getIdProducto()+"@@"+vendedorLogeado.getCedula()+"\n";
             }
         }
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_PRODUCTO,contenido,true);

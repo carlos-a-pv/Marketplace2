@@ -127,7 +127,7 @@ AdministradorViewController {
     }
     @FXML
     private void abrirVentanaInfo(Vendedor vendedor) throws IOException {
-         modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
+        modelFactoryController.getMarketplace().setVendedorSeleccionado(vendedor);
         if (vendedor != null) {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/vendedor-info.fxml"));

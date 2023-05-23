@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,6 +33,8 @@ public class VendedorViewController {
     Vendedor vendedorSeleccionado;
     @FXML
     private TabPane tabPane;
+    @FXML
+    private AnchorPane contentAll;
 
     @FXML
     void initialize() {
@@ -75,6 +78,8 @@ public class VendedorViewController {
             content.setPadding(new Insets(20,20,20,20));
             content.setAlignment(Pos.CENTER);
             fotoUsuario.setImage(image);
+            //fotoUsuario.setFitHeight(100);
+            //fotoUsuario.setFitWidth(100);
             content.setSpacing(30);
             hbox.setSpacing(30);
             btnCambiarImagen.setAlignment(Pos.BOTTOM_LEFT);
@@ -85,6 +90,12 @@ public class VendedorViewController {
             btnAddVendedor.setPrefWidth(50);
             btnAddVendedor.setPrefHeight(50);
 
+            //content.setPrefHeight(700);
+
+            contentAll.setTopAnchor(tabPane, 0.0);
+            contentAll.setBottomAnchor(tabPane, 0.0);
+            contentAll.setLeftAnchor(tabPane, 0.0);
+            contentAll.setRightAnchor(tabPane, 0.0);
             //VBox.setMargin(button, new Insets(10));
             //Setting
             productos.setItems(convert(modelFactoryController.obtenerVendedores().get(i).getProductos()));
@@ -121,7 +132,7 @@ public class VendedorViewController {
             btnAddVendedor.setGraphic(view4);
 
             //Add de componentes
-            content.getChildren().addAll(hbox,btnAddVendedor,  btnCambiarImagen, productos, btnPublicar);
+            content.getChildren().addAll(hbox,btnAddVendedor, btnCambiarImagen, productos, btnPublicar);
             tab.setContent(content);
             tabPane.getTabs().add(tab);
 
@@ -209,7 +220,7 @@ public class VendedorViewController {
                 btnCambiarImagen.setDisable(true);
                 btnEditar.setDisable(true);
                 btnPublicar.setDisable(true);
-                productos.setDisable(true);
+                productos.setDisable(false);
                 btnSolicitud.setDisable(true);
                 btnVolver.setDisable(true);
 
@@ -231,19 +242,16 @@ public class VendedorViewController {
 
         //Funcionalidad para posicionar el focus directamente en el vendedor logeado
         int indice = buscarVendedorLogeado(vendedorLogeado);
-        tabPane.getSelectionModel().select(indice+1);
+        tabPane.getSelectionModel().select(indice);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if(newTab.equals("tabMarketplace")){
-                //SE HA SELECCIONADO EL TAB DEL MARKETPLACE
-            }else {
-                try {
-                    int index = Integer.parseInt(newTab.getId())-1;
-                    this.vendedorSeleccionado = modelFactoryController.obtenerVendedores().get(index);
-                    System.out.println(vendedorSeleccionado.getNombre());
-                } catch (NumberFormatException e) {
+            try {
+                int index = Integer.parseInt(newTab.getId())-1;
+                this.vendedorSeleccionado = modelFactoryController.obtenerVendedores().get(index);
+                modelFactoryController.setVendedorSeleccionado(vendedorSeleccionado);
+                System.out.println(vendedorSeleccionado);
+            } catch (NumberFormatException e) {
 
-                }
             }
         });
 
@@ -277,14 +285,16 @@ public class VendedorViewController {
     }
 
     private void abrirVentanaInfo(Producto x) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 350);
-        Stage stage = new Stage();
-        stage.setTitle("INFO PRODUCTO");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
-
+        modelFactoryController.getMarketplace().setProductoSeleccionado(x);
+        if (x != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 600, 350);
+            Stage stage = new Stage();
+            stage.setTitle("INFO PRODUCTO");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+        }
     }
 
     private void publicarProducto() throws IOException {
