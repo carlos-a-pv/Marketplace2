@@ -57,7 +57,7 @@ public class LoginViewController {
                 String usuario = ((Vendedor) empleadoIniciado).getNombre();
                 modelFactoryController.vendedorLogiado((Vendedor)empleadoIniciado);
                 modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario: "+usuario, 1, "inicioSesión");
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-view.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/principal-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
                 Stage stage = new Stage();
                 stage.setTitle("VENDEDOR");
