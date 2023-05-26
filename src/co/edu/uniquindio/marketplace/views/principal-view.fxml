@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="contentAll" prefHeight="707.0" prefWidth="849.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.marketplace.controllers.VendedorViewController">
    <children>
-      <TabPane fx:id="tabPane" layoutX="-2.0" prefHeight="597.0" prefWidth="679.0" tabClosingPolicy="UNAVAILABLE" />
+      <TabPane fx:id="tabPane" layoutX="-2.0" prefHeight="629.0" prefWidth="980.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tabMarketplace" text="MARKETPLACE">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="650.0" prefWidth="1150.0">
+                     <children>
+                        <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="14.0" prefHeight="650.0" prefWidth="1150.0">
+                           <content>
+                              <VBox fx:id="contentBox" alignment="CENTER" prefHeight="655.0" prefWidth="1109.0" />
+                           </content></ScrollPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+         </tabs></TabPane>
    </children>
 </AnchorPane>

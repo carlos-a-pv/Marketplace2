@@ -2,8 +2,10 @@ package co.edu.uniquindio.marketplace.controllers;
 
 import co.edu.uniquindio.marketplace.MainApp;
 import co.edu.uniquindio.marketplace.model.*;
+import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.CssParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,15 +18,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class VendedorViewController {
     ModelFactoryController modelFactoryController;
@@ -35,9 +35,18 @@ public class VendedorViewController {
     private TabPane tabPane;
     @FXML
     private AnchorPane contentAll;
+    @FXML
+    private Tab tabMarketplace;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox contentBox;
+
+    ArrayList<Producto> producCargados;
+    ArrayList<Producto> productosVendedor;
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException {
         modelFactoryController = ModelFactoryController.getInstance();
         crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         Vendedor vendedorLogeado = modelFactoryController.getVendedorLogeado();
@@ -47,6 +56,16 @@ public class VendedorViewController {
         view2.setFitHeight(20);
         view2.setPreserveRatio(true);
         btnVolver1.setGraphic(view2);*/
+
+        //INICIAR EL TAB DEL MARKETPLACE
+        producCargados = Persistencia.cargarProductos();
+        int cantidadProductos = modelFactoryController.obtenerProductos().size();
+
+        for (int i = 0; i < cantidadProductos; i++) {
+            Producto producto = producCargados.get(i);
+            String infoProducto = producto.toString();
+            addNewItem(infoProducto);
+        }
 
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
@@ -98,7 +117,10 @@ public class VendedorViewController {
             contentAll.setRightAnchor(tabPane, 0.0);
             //VBox.setMargin(button, new Insets(10));
             //Setting
-            productos.setItems(convert(modelFactoryController.obtenerVendedores().get(i).getProductos()));
+            llenarTabla(modelFactoryController.obtenerVendedores().get(i));
+            if(modelFactoryController.getVendedorLogeado().equals(modelFactoryController.obtenerVendedores().get(i))){
+                productos.setItems((getListaProductoData(modelFactoryController.getVendedorLogeado())));
+            }
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
             colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
             colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
@@ -141,8 +163,9 @@ public class VendedorViewController {
                 try {
                     publicarProducto();
                     productos.getItems().clear();
-                    productos.setItems(getListaProductoData());
+                    productos.setItems(getListaProductoData(modelFactoryController.getVendedorLogeado()));
                     productos.refresh();
+                    refreshTab();
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -238,11 +261,12 @@ public class VendedorViewController {
 
             });
 
+            productosVendedor = null;
         }
 
         //Funcionalidad para posicionar el focus directamente en el vendedor logeado
         int indice = buscarVendedorLogeado(vendedorLogeado);
-        tabPane.getSelectionModel().select(indice);
+        tabPane.getSelectionModel().select(indice+1);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             try {
@@ -255,6 +279,14 @@ public class VendedorViewController {
             }
         });
 
+    }
+
+    private void llenarTabla(Vendedor vendedor) throws IOException {
+        ArrayList<Producto> productosCargados = Persistencia.cargarProductos();
+        if(productosCargados != null){
+            productosVendedor = (ArrayList<Producto>) productosCargados.stream().filter(producto -> producto.getIdVendedor().equals(vendedor.getCedula())).collect(Collectors.toList());
+        }
+        vendedor.setProductos(productosVendedor);
     }
 
     private void agregarVendedor() {
@@ -310,19 +342,12 @@ public class VendedorViewController {
     public void OnCambiarFotoClick(ActionEvent actionEvent) {
     }
 
-    public ObservableList<Producto> getListaProductoData() throws IOException {
-        listaProductosData.addAll(crudProductoViewController.obtenerProductos());
+    public ObservableList<Producto> getListaProductoData(Vendedor vendedor) throws IOException {
+        listaProductosData.addAll(vendedor.getProductos());
         return listaProductosData;
     }
 
-    public static <Prducto> ObservableList<Producto> convert(ArrayList<Producto> arrayList) {
-        ObservableList<Producto> observableList = FXCollections.observableArrayList(arrayList);
-        return observableList;
-
-    }
-
     private void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
-
         Alert aler = new Alert(alertType);
         aler.setTitle(titulo);
         aler.setHeaderText(header);
@@ -332,12 +357,95 @@ public class VendedorViewController {
 
     private int buscarVendedorLogeado(Vendedor vendedorLogeado){
         ArrayList<Vendedor> vendedores = modelFactoryController.obtenerVendedores();
-
         for(Vendedor vende : vendedores){
             if(vende.equals(vendedorLogeado)){
                 return vendedores.indexOf(vende);
             }
         }
         return 0;
+    }
+
+    private void addNewItem(String info) {
+        Pane itemPane = createItemPane(info);
+        contentBox.getChildren().add(itemPane);
+    }
+    private Pane createItemPane(String info) {
+        VBox itemPane = new VBox();
+        itemPane.setAlignment(Pos.CENTER);
+        itemPane.setPadding(new Insets(10));
+        itemPane.setStyle("-fx-background-color: #FFFFFF;");
+
+        itemPane.setPrefWidth(500);
+        itemPane.setPrefHeight(500);
+
+        HBox buttonContent = new HBox(10);
+        buttonContent.setPadding(new Insets(10));
+        itemPane.setStyle("-fx-background-color: #FFFFFF");
+
+        HBox infoContent = new HBox(10);
+        infoContent.setPadding(new Insets(10));
+        infoContent.setStyle("-fx-background-color: #FFFFFF");
+
+        buttonContent.setAlignment(Pos.CENTER);
+        infoContent.setAlignment(Pos.CENTER);
+
+        ImageView imageView = new ImageView(new Image("/resources/producto.png"));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(300);
+
+        imageView.setPreserveRatio(true);
+
+        Button likeButton = new Button();
+        Image img = new Image("/resources/like.png");
+        ImageView view = new ImageView(img);
+        view.setFitHeight(20);
+        view.setPreserveRatio(true);
+        likeButton.setGraphic(view);
+
+        Button commentButton = new Button("Comentario");
+        Image img2 = new Image("/resources/comentarios.png");
+        ImageView view2 = new ImageView(img2);
+        view2.setFitHeight(20);
+        view2.setPreserveRatio(true);
+        commentButton.setGraphic(view2);
+
+        Button buyButton = new Button("Comprar");
+        Image img3 = new Image("/resources/comprar.png");
+        ImageView view3 = new ImageView(img3);
+        view3.setFitHeight(20);
+        view3.setPreserveRatio(true);
+        buyButton.setGraphic(view3);
+
+        TextArea descriptionArea = new TextArea();
+        descriptionArea.setPrefColumnCount(20);
+        descriptionArea.setWrapText(true);
+        String contenido = "";
+        contenido += info.split(",")[0]+"\n";
+        contenido += info.split(",")[1]+"\n";
+        contenido += info.split(",")[2]+"\n";
+        contenido += info.split(",")[3]+"\n";
+        contenido += info.split(",")[5]+"\n";
+        descriptionArea.setText(contenido);
+
+        descriptionArea.setDisable(true);
+        buttonContent.getChildren().addAll(likeButton, commentButton, buyButton);
+        infoContent.getChildren().addAll(imageView, descriptionArea);
+
+        itemPane.getChildren().addAll( infoContent, buttonContent);
+
+        return itemPane;
+    }
+
+    private void refreshTab() throws IOException {
+        producCargados = Persistencia.cargarProductos();
+        int cantidadProductos = modelFactoryController.obtenerProductos().size();
+
+        for (int i = 0; i < cantidadProductos; i++) {
+            Producto producto = producCargados.get(i);
+            String infoProducto = producto.toString();
+            addNewItem(infoProducto);
+        }
+
+        scrollPane.setContent(contentBox);
     }
 }

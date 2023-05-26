@@ -117,4 +117,8 @@ public class Vendedor extends Empleado{
     public ArrayList<Vendedor> getVendedoresAliados() {
         return vendedoresAliados;
     }
+
+    public void setProductos(ArrayList<Producto> productos) {
+        this.productos = productos;
+    }
 }

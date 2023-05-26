@@ -62,7 +62,7 @@ public class ModelFactoryController implements IModelFactoryService {
         inicializarSalvarDatos();
     }
 
-    private void cargarProdcutoDesdeArchivos() {
+    public void cargarProdcutoDesdeArchivos() {
         try{
 
             Persistencia.cargarProductos();
