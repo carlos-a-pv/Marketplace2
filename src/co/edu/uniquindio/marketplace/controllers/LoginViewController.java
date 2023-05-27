@@ -39,23 +39,30 @@ public class LoginViewController {
         //2. Validar la información
             Empleado empleadoIniciado = modelFactoryController.autenticar(user, password);
 
+
             if (empleadoIniciado instanceof Administrador){
+                modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario Admin", 1, "inicioSesión");
 
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/administrador-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+                Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
                 Stage stage = new Stage();
                 stage.setTitle("ADMINISTRADOR");
                 stage.setScene(scene);
+                //stage.setFullScreen(true);
                 stage.initOwner(btnLogin.getScene().getWindow());
                 btnLogin.getScene().getWindow().hide();
                 stage.show();
 
             }else if(empleadoIniciado instanceof Vendedor){
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/vendedor-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 500, 400);
-                Stage stage = new Stage();
+                String usuario = ((Vendedor) empleadoIniciado).getNombre();
+                modelFactoryController.vendedorLogiado((Vendedor)empleadoIniciado);
+                modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario: "+usuario, 1, "inicioSesión");
+                FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/principal-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+            Stage stage = new Stage();
                 stage.setTitle("VENDEDOR");
                 stage.setScene(scene);
+                //stage.setFullScreen(true);
                 stage.initOwner(btnLogin.getScene().getWindow());
                 btnLogin.getScene().getWindow().hide();
                 stage.show();

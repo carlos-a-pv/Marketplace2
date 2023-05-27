@@ -34,6 +34,8 @@ public class VendedorInfoController {
     private Button btnEliminar;
     @FXML
     private Button btnActualizar;
+
+
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
@@ -45,26 +47,21 @@ public class VendedorInfoController {
         tfDireccion.setText(vendedorSeleccionado.getDireccion());
         tfUser.setText(vendedorSeleccionado.getUser().getNombre());
         tfPassword.setText(vendedorSeleccionado.getContra());
-
-
     }
-
     public void onEliminarVendedorClick(ActionEvent actionEvent) {
         eliminarEmpleado();
 
-
     }
     private void eliminarEmpleado(){
+
         boolean vendedorEliminado = false;
         if(vendedorSeleccionado != null){
             if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar al empleado?") == true){
                 vendedorEliminado = crudVendedorViewController.eliminarVendedor(vendedorSeleccionado.getCedula());
                 if(vendedorEliminado == true){
                     modelFactoryController.getMarketplace().getVendedores().remove(vendedorSeleccionado);
+                    modelFactoryController.registrarAccionesSistema("Se ha eliminado el usuario con cedula"+vendedorSeleccionado.getCedula(), 1,"Elimininacion vendedor");
                     vendedorSeleccionado = null;
-
-                    //tableEmpleados.getSelectionModel().clearSelection();
-                    //limpiarCamposEmpleado();
                     mostrarMensaje("Notificación empleado", "Empleado eliminado", "El empleado se ha eliminado con éxito", Alert.AlertType.INFORMATION);
                 }else{
                     mostrarMensaje("Notificación empleado", "Empleado no eliminado", "El empleado no se puede eliminar", Alert.AlertType.ERROR);
@@ -101,6 +98,7 @@ public class VendedorInfoController {
                 if(vendedorActualizado == true){
                     //tableEmpleados.refresh();
                     mostrarMensaje("Notificación empleado", "Empleado actualizado", "El empleado se ha actualizado con éxito", Alert.AlertType.INFORMATION);
+                    modelFactoryController.registrarAccionesSistema("Se ha actualizado el vendedor con cedula"+vendedorSeleccionado.getCedula(), 1, "Actualizacion vendedor");
                     //limpiarCamposEmpleado();
                 }else{
                     mostrarMensaje("Notificación empleado", "Empleado no actualizado", "El empleado no se ha actualizado con éxito", Alert.AlertType.INFORMATION);

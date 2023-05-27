@@ -9,12 +9,12 @@ import java.util.List;
 public class Marketplace {
     private Administrador admin;
     private Vendedor vendedorSeleccionado;
+    private Producto productoSeleccionado;
     private ArrayList<Vendedor> vendedores;
 
     public Marketplace(){
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
-
     }
     public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
         Vendedor nuevoVendedor = null;
@@ -61,10 +61,8 @@ public class Marketplace {
         return vendedorEncontrado;
     }
     public Empleado autenticar (String user, String password) throws InicioSesionException {
-        Usuario usuarioAValidar = new Usuario(user, password);
-
-        Vendedor vendedor= vendedores.stream()
-                .filter( (vende)-> vende.getUser().getNombre().equals(user) && vende.getUser().getPassword().equals(password))
+        Vendedor vendedor = vendedores.stream()
+                .filter( (vende)-> vende.getUser().getNombre().equals(user) && vende.getContra().equals(password))
                 .findFirst()
                 .orElse(null);
 
@@ -74,7 +72,7 @@ public class Marketplace {
             return vendedor;
         }
         else {
-            throw new InicioSesionException("El empleado con cedula: "+user+" no existe");
+            throw new InicioSesionException("El empleado con usuario: "+user+" no existe");
         }
 
     }
@@ -124,5 +122,13 @@ public class Marketplace {
 
     public ArrayList<Vendedor> obtenerVendedores() {
         return getVendedores();
+    }
+
+    public Producto getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
     }
 }

@@ -1,7 +1,7 @@
 package co.edu.uniquindio.marketplace.servicies;
 import java.util.ArrayList;
 
-import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.model.*;
 
 public interface IModelFactoryService {
 
@@ -12,6 +12,12 @@ public interface IModelFactoryService {
 
     boolean actualizarVendedor(String cedulaActual, String nombre, String apellido, String cedula, String direccion, String user, String password);
     public ArrayList<Vendedor> obtenerVendedores();
+
+    Producto crearProducto(String nombre, String precio, Categoria categoria);
+
+    Solicitud aceptarSolicitud(Solicitud solicitudSeleccionada);
+
+    boolean buscarVendedorAliado(Vendedor vendedorLogeado, Vendedor vendedorSeleccionado);
 
     //public Boolean eliminarEmpleado(String cedula);
     //public Empleado obtenerEmpleado(String cedula);
