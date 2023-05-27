@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -58,6 +60,8 @@ public class VendedorViewController {
         btnVolver1.setGraphic(view2);*/
 
         //INICIAR EL TAB DEL MARKETPLACE
+        //contentBox.setPadding(new Insets(0, 0, 0, 0));
+        contentBox.setSpacing(50);
         producCargados = Persistencia.cargarProductos();
         int cantidadProductos = modelFactoryController.obtenerProductos().size();
 
@@ -243,7 +247,7 @@ public class VendedorViewController {
                 btnCambiarImagen.setDisable(true);
                 btnEditar.setDisable(true);
                 btnPublicar.setDisable(true);
-                productos.setDisable(false);
+                productos.setDisable(true);
                 btnSolicitud.setDisable(true);
                 btnVolver.setDisable(true);
 
@@ -373,24 +377,27 @@ public class VendedorViewController {
         VBox itemPane = new VBox();
         itemPane.setAlignment(Pos.CENTER);
         itemPane.setPadding(new Insets(10));
-        itemPane.setStyle("-fx-background-color: #FFFFFF;");
+        itemPane.setStyle("-fx-background-color: #b1d5e0");
 
-        itemPane.setPrefWidth(500);
-        itemPane.setPrefHeight(500);
+        itemPane.setMinWidth(400); // Ancho mínimo del VBox
+        itemPane.setMaxWidth(700); // Ancho máximo del VBox
+        itemPane.setMinHeight(400); // Altura mínima del VBox
+        itemPane.setMaxHeight(400   );
 
         HBox buttonContent = new HBox(10);
         buttonContent.setPadding(new Insets(10));
-        itemPane.setStyle("-fx-background-color: #FFFFFF");
+        //itemPane.setStyle("-fx-background-color: #42cbf5");
 
         HBox infoContent = new HBox(10);
-        infoContent.setPadding(new Insets(10));
-        infoContent.setStyle("-fx-background-color: #FFFFFF");
+        //infoContent.setPadding(new Insets(10));
+        infoContent.setSpacing(75);
+        //infoContent.setStyle("-fx-background-color: #42cbf5");
 
         buttonContent.setAlignment(Pos.CENTER);
         infoContent.setAlignment(Pos.CENTER);
 
         ImageView imageView = new ImageView(new Image("/resources/producto.png"));
-        imageView.setFitWidth(100);
+        imageView.setFitWidth(300);
         imageView.setFitHeight(300);
 
         imageView.setPreserveRatio(true);
@@ -398,23 +405,29 @@ public class VendedorViewController {
         Button likeButton = new Button();
         Image img = new Image("/resources/like.png");
         ImageView view = new ImageView(img);
-        view.setFitHeight(20);
+        view.setFitHeight(30);
         view.setPreserveRatio(true);
         likeButton.setGraphic(view);
+        likeButton.setPrefWidth(50);
+        likeButton.setPrefHeight(50);
 
-        Button commentButton = new Button("Comentario");
+        Button commentButton = new Button();
         Image img2 = new Image("/resources/comentarios.png");
         ImageView view2 = new ImageView(img2);
-        view2.setFitHeight(20);
+        view2.setFitHeight(30);
         view2.setPreserveRatio(true);
         commentButton.setGraphic(view2);
+        commentButton.setPrefHeight(50);
+        commentButton.setPrefWidth(50);
 
-        Button buyButton = new Button("Comprar");
+        Button buyButton = new Button();
         Image img3 = new Image("/resources/comprar.png");
         ImageView view3 = new ImageView(img3);
-        view3.setFitHeight(20);
+        view3.setFitHeight(30);
         view3.setPreserveRatio(true);
         buyButton.setGraphic(view3);
+        buyButton.setPrefWidth(50);
+        buyButton.setPrefHeight(50);
 
         TextArea descriptionArea = new TextArea();
         descriptionArea.setPrefColumnCount(20);
@@ -426,12 +439,78 @@ public class VendedorViewController {
         contenido += info.split(",")[3]+"\n";
         contenido += info.split(",")[5]+"\n";
         descriptionArea.setText(contenido);
-
         descriptionArea.setDisable(true);
+
+        Label nombre = new Label(info.split(",")[0]);
+        Label precio = new Label("$"+info.split(",")[1]);
+        Label categoria = new Label(info.split(",")[2]);
+        Label estado = new Label(info.split(",")[3]);
+        Label fecha = new Label(info.split(",")[5]);
+
+        nombre.setPrefWidth(100);
+        nombre.setPrefHeight(100);
+        nombre.setFont(new Font(20));
+
+        precio.setPrefWidth(100);
+        precio.setPrefHeight(100);
+        precio.setFont(new Font(20));
+
+        categoria.setPrefWidth(300);
+        categoria.setPrefHeight(100);
+        categoria.setFont(new Font(20));
+
+        estado.setPrefWidth(300);
+        estado.setPrefHeight(100);
+        estado.setFont(new Font(20));
+
+        fecha.setPrefHeight(100);
+        fecha.setPrefWidth(300);
+        fecha.setFont(new Font(20));
+
+        VBox infoText = new VBox();
+        infoText.getChildren().addAll(nombre, precio, categoria, estado, fecha);
+        infoText.setSpacing(15);
+
         buttonContent.getChildren().addAll(likeButton, commentButton, buyButton);
-        infoContent.getChildren().addAll(imageView, descriptionArea);
+        infoContent.getChildren().addAll(imageView, infoText);
 
         itemPane.getChildren().addAll( infoContent, buttonContent);
+        // Evento cuando el mouse entra en el botón
+        likeButton.setOnMouseEntered(event -> {
+            likeButton.setScaleX(1.2); // Aumentar el tamaño horizontalmente
+            likeButton.setScaleY(1.2); // Aumentar el tamaño verticalmente
+            likeButton.setCursor(Cursor.HAND);
+        });
+
+        // Evento cuando el mouse sale del botón
+        likeButton.setOnMouseExited(event -> {
+            likeButton.setScaleX(1.0); // Restaurar el tamaño horizontal original
+            likeButton.setScaleY(1.0); // Restaurar el tamaño vertical original
+        });
+        // Evento cuando el mouse entra en el botón
+        commentButton.setOnMouseEntered(event -> {
+            commentButton.setScaleX(1.2); // Aumentar el tamaño horizontalmente
+            commentButton.setScaleY(1.2); // Aumentar el tamaño verticalmente
+            commentButton.setCursor(Cursor.HAND);
+        });
+
+        // Evento cuando el mouse sale del botón
+        commentButton.setOnMouseExited(event -> {
+            commentButton.setScaleX(1.0); // Restaurar el tamaño horizontal original
+            commentButton.setScaleY(1.0); // Restaurar el tamaño vertical original
+        });
+        // Evento cuando el mouse entra en el botón
+        buyButton.setOnMouseEntered(event -> {
+            buyButton.setScaleX(1.2); // Aumentar el tamaño horizontalmente
+            buyButton.setScaleY(1.2); // Aumentar el tamaño verticalmente
+            buyButton.setCursor(Cursor.HAND);
+        });
+
+        // Evento cuando el mouse sale del botón
+        buyButton.setOnMouseExited(event -> {
+            buyButton.setScaleX(1.0); // Restaurar el tamaño horizontal original
+            buyButton.setScaleY(1.0); // Restaurar el tamaño vertical original
+        });
 
         return itemPane;
     }
