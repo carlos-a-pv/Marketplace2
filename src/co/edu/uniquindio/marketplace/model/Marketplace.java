@@ -11,10 +11,12 @@ public class Marketplace {
     private Vendedor vendedorSeleccionado;
     private Producto productoSeleccionado;
     private ArrayList<Vendedor> vendedores;
+    private ArrayList<Producto> productos;
 
     public Marketplace(){
         vendedores = new ArrayList<>();
         admin = new Administrador("admin", "admin123");
+        productos = new ArrayList<>();
     }
     public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
         Vendedor nuevoVendedor = null;
@@ -125,10 +127,15 @@ public class Marketplace {
     }
 
     public Producto getProductoSeleccionado() {
-        return productoSeleccionado;
+        return this.productoSeleccionado;
     }
 
-    public void setProductoSeleccionado(Producto productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
+    public void setProductoSeleccionado(String idProducto) {
+        this.productoSeleccionado  = productos.stream().filter(producto -> producto.getIdProducto().equals(idProducto)).findFirst().orElse(null);
+
+    }
+
+    public ArrayList<Producto> getProductos() {
+        return productos;
     }
 }

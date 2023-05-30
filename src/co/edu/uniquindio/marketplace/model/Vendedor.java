@@ -22,12 +22,12 @@ public class Vendedor extends Empleado{
          this.apellido = apellido;
          this.cedula = cedula;
          this.direccion = direccion;
-         contra = userNew.getPassword();
+         this.contra = userNew.getPassword();
          this.descripcion = "";
          this.solicitudesEnviadas = new ArrayList<>();
          this.solicitudesRecibidas = new ArrayList<>();
-         productos = new ArrayList<>();
-         vendedoresAliados = new ArrayList<>();
+         this.productos = new ArrayList<>();
+         this.vendedoresAliados = new ArrayList<>();
      }
 
      public Producto crearProducto(String nombre, String precio, Categoria categoria ){
@@ -82,7 +82,7 @@ public class Vendedor extends Empleado{
     }
 
     public ArrayList<Producto> getProductos() {
-        return productos;
+        return this.productos;
     }
 
     public String getDescripcion() {

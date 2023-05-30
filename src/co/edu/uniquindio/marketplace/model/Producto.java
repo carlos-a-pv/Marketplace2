@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 public class Producto {
     private  String nombre;
+    private String nombreVendedor;
     private String precio;
     private Categoria categoria;
     private Disponibilidad estado;
@@ -25,7 +26,8 @@ public class Producto {
         this.estado = Disponibilidad.DISPONIBLE;
         this.idProducto = generarId();
         this.fechaPublicacion = cargarFechaSistema();
-
+        this.comentarios = new ArrayList<>();
+        this.comentarios.add(new Comentario("hoy", "yo", "hola, esto es una prueba"));
     }
 
     private String generarId() {
@@ -89,13 +91,37 @@ public class Producto {
         return fechaPublicacion;
     }
 
+    public void setFechaPublicacion(String fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
+    }
+
+    public String getNombreVendedor() {
+        return nombreVendedor;
+    }
+
+    public void setNombreVendedor(String nombreVendedor) {
+        this.nombreVendedor = nombreVendedor;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes += likes;
+    }
+
     @Override
     public String toString() {
-        return nombre+","+precio+","+categoria+","+estado+","+idProducto+","+fechaPublicacion;
+        return idProducto+","+nombre+","+precio+","+categoria+","+estado+","+idProducto+","+fechaPublicacion;
+    }
+
+    public ArrayList<Comentario> getComentarios() {
+        return comentarios;
     }
 
     private String cargarFechaSistema() {
-
+        String fechaSistema = "";
         String diaN = "";
         String mesN = "";
         String añoN = "";
@@ -122,6 +148,13 @@ public class Producto {
         else{
             mesN+=""+mes;
         }
-        return año+"-"+mesN+"-"+diaN;
+
+        //		fecha_Actual+= año+"-"+mesN+"-"+ diaN;
+        fechaSistema = año+"-"+mesN+"-"+diaN+"-"+hora+":"+minuto;
+
+        return fechaSistema;
+        //fechaSistema = año+"-"+mesN+"-"+diaN;
+        //		horaFechaSistema = hora+"-"+minuto;
     }
+
 }

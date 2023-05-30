@@ -142,8 +142,8 @@ public  class ArchivoUtil {
         }
 
         //		fecha_Actual+= año+"-"+mesN+"-"+ diaN;
-        //		fechaSistema = año+"-"+mesN+"-"+diaN+"-"+hora+"-"+minuto;
-        fechaSistema = año+"-"+mesN+"-"+diaN;
+        		fechaSistema = año+"-"+mesN+"-"+diaN+"-"+hora+"-"+minuto;
+        //fechaSistema = año+"-"+mesN+"-"+diaN;
         //		horaFechaSistema = hora+"-"+minuto;
     }
 

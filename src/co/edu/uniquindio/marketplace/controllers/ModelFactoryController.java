@@ -21,6 +21,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
 
+
     //------------------------------  Singleton ------------------------------------------------
     // Clase estatica oculta. Tan solo se instanciara el singleton una vez
     private static class SingletonHolder {
@@ -64,8 +65,7 @@ public class ModelFactoryController implements IModelFactoryService {
 
     public void cargarProdcutoDesdeArchivos() {
         try{
-
-            Persistencia.cargarProductos();
+           getMarketplace().getProductos().addAll(Persistencia.cargarProductos());
         }catch (IOException e){
 
         }
@@ -89,9 +89,7 @@ public class ModelFactoryController implements IModelFactoryService {
         this.marketplace = new Marketplace();
         try {
             ArrayList<Vendedor> listaVendedores;
-            //ArrayList<Producto> listProductos = new ArrayList<Producto>();
             listaVendedores = Persistencia.cargarVendedores();
-            //listProductos = Persistencia.cargarProductos();
             if(listaVendedores != null){
                 getMarketplace().getVendedores().addAll(listaVendedores);
 
@@ -171,8 +169,6 @@ public class ModelFactoryController implements IModelFactoryService {
     public ArrayList<Vendedor> obtenerVendedores() {
         return getMarketplace().obtenerVendedores();
     }
-
-
 
     public Empleado autenticar(String user, String password) {
         Empleado empleado = null;

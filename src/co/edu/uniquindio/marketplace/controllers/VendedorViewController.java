@@ -33,6 +33,7 @@ public class VendedorViewController {
     CrudProductoViewController crudProductoViewController;
     ObservableList<Producto> listaProductosData = FXCollections.observableArrayList();
     Vendedor vendedorSeleccionado;
+    String idProducto;
     @FXML
     private TabPane tabPane;
     @FXML
@@ -62,17 +63,23 @@ public class VendedorViewController {
         //INICIAR EL TAB DEL MARKETPLACE
         //contentBox.setPadding(new Insets(0, 0, 0, 0));
         contentBox.setSpacing(50);
-        producCargados = Persistencia.cargarProductos();
-        int cantidadProductos = modelFactoryController.obtenerProductos().size();
+        producCargados = modelFactoryController.getMarketplace().getProductos();
 
-        for (int i = 0; i < cantidadProductos; i++) {
-            Producto producto = producCargados.get(i);
-            String infoProducto = producto.toString();
-            addNewItem(infoProducto);
+        if(producCargados != null){
+            int cantidadProductos = modelFactoryController.obtenerProductos().size();
+
+            for (int i = 0; i < cantidadProductos; i++) {
+                Producto producto = producCargados.get(i);
+                String infoProducto = producto.toString();
+                addNewItem(infoProducto, producCargados.get(i));
+            }
         }
 
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
+
+
+            //modelFactoryController.getMarketplace().getProductos().forEach(producto -> System.out.println(producto.getNombre()));
 
             //Creaccion de componentes
             Tab tab = new Tab("Vendedor:"+(i+1));
@@ -94,7 +101,11 @@ public class VendedorViewController {
             TableColumn<Producto, Disponibilidad> colEstado = new TableColumn<>("Estado");
             TableColumn<Producto, Disponibilidad> colId = new TableColumn<>("ID");
             TextArea descripcion2 = new TextArea(modelFactoryController.obtenerVendedores().get(i).getDescripcion());
-            HBox hbox = new HBox(btnVolver,fotoUsuario, nombre,  descripcion2, btnEditar, btnSolicitud);
+
+            VBox vBox = new VBox(10);
+            vBox.getChildren().addAll(nombre, fotoUsuario, btnCambiarImagen);
+
+            HBox hbox = new HBox(btnVolver, vBox,descripcion2,btnEditar, btnSolicitud);
 
 
             //Estilos
@@ -113,6 +124,10 @@ public class VendedorViewController {
             btnAddVendedor.setPrefWidth(50);
             btnAddVendedor.setPrefHeight(50);
 
+            nombre.setPrefWidth(200);
+            nombre.setFont(new Font(25));
+            nombre.setAlignment(Pos.CENTER);
+            nombre.setText(nombre.getText().toUpperCase());
             //content.setPrefHeight(700);
 
             contentAll.setTopAnchor(tabPane, 0.0);
@@ -120,10 +135,15 @@ public class VendedorViewController {
             contentAll.setLeftAnchor(tabPane, 0.0);
             contentAll.setRightAnchor(tabPane, 0.0);
             //VBox.setMargin(button, new Insets(10));
+            vBox.setSpacing(50);
+            vBox.setAlignment(Pos.CENTER);
             //Setting
             llenarTabla(modelFactoryController.obtenerVendedores().get(i));
+
             if(modelFactoryController.getVendedorLogeado().equals(modelFactoryController.obtenerVendedores().get(i))){
-                productos.setItems((getListaProductoData(modelFactoryController.getVendedorLogeado())));
+                if(getListaProductoData(modelFactoryController.obtenerVendedores().get(i)) != null){
+                    productos.setItems(listaProductosData);
+                }
             }
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
             colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
@@ -158,7 +178,7 @@ public class VendedorViewController {
             btnAddVendedor.setGraphic(view4);
 
             //Add de componentes
-            content.getChildren().addAll(hbox,btnAddVendedor, btnCambiarImagen, productos, btnPublicar);
+            content.getChildren().addAll(hbox,btnAddVendedor, productos, btnPublicar);
             tab.setContent(content);
             tabPane.getTabs().add(tab);
 
@@ -258,7 +278,6 @@ public class VendedorViewController {
             productos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
                 try {
                     abrirVentanaInfo(newValue);
-                    //  productos.getSelectionModel().clearSelection();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -286,7 +305,7 @@ public class VendedorViewController {
     }
 
     private void llenarTabla(Vendedor vendedor) throws IOException {
-        ArrayList<Producto> productosCargados = Persistencia.cargarProductos();
+        ArrayList<Producto> productosCargados = modelFactoryController.getMarketplace().getProductos();
         if(productosCargados != null){
             productosVendedor = (ArrayList<Producto>) productosCargados.stream().filter(producto -> producto.getIdVendedor().equals(vendedor.getCedula())).collect(Collectors.toList());
         }
@@ -321,7 +340,7 @@ public class VendedorViewController {
     }
 
     private void abrirVentanaInfo(Producto x) throws IOException {
-        modelFactoryController.getMarketplace().setProductoSeleccionado(x);
+        modelFactoryController.getMarketplace().setProductoSeleccionado(x.getIdProducto());
         if (x != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 350);
@@ -347,8 +366,11 @@ public class VendedorViewController {
     }
 
     public ObservableList<Producto> getListaProductoData(Vendedor vendedor) throws IOException {
-        listaProductosData.addAll(vendedor.getProductos());
-        return listaProductosData;
+        if(vendedor.getProductos() != null){
+            listaProductosData.addAll(vendedor.getProductos());
+            return listaProductosData;
+        }
+        return null;
     }
 
     private void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
@@ -369,11 +391,11 @@ public class VendedorViewController {
         return 0;
     }
 
-    private void addNewItem(String info) {
-        Pane itemPane = createItemPane(info);
+    private void addNewItem(String info, Producto p) {
+        Pane itemPane = createItemPane(info, p);
         contentBox.getChildren().add(itemPane);
     }
-    private Pane createItemPane(String info) {
+    private Pane createItemPane(String info, Producto p) {
         VBox itemPane = new VBox();
         itemPane.setAlignment(Pos.CENTER);
         itemPane.setPadding(new Insets(10));
@@ -402,6 +424,8 @@ public class VendedorViewController {
 
         imageView.setPreserveRatio(true);
 
+        Label cantidadLikes = new Label(String.valueOf(p.getLikes()));
+        cantidadLikes.setFont(new Font(18));
         Button likeButton = new Button();
         Image img = new Image("/resources/like.png");
         ImageView view = new ImageView(img);
@@ -437,7 +461,9 @@ public class VendedorViewController {
         contenido += info.split(",")[1]+"\n";
         contenido += info.split(",")[2]+"\n";
         contenido += info.split(",")[3]+"\n";
+        contenido += info.split(",")[4]+"\n";
         contenido += info.split(",")[5]+"\n";
+        contenido += info.split(",")[6]+"\n";
         descriptionArea.setText(contenido);
         descriptionArea.setDisable(true);
 
@@ -445,7 +471,7 @@ public class VendedorViewController {
         Label precio = new Label("$"+info.split(",")[1]);
         Label categoria = new Label(info.split(",")[2]);
         Label estado = new Label(info.split(",")[3]);
-        Label fecha = new Label(info.split(",")[5]);
+        Label fecha = new Label(info.split(",")[6]);
 
         nombre.setPrefWidth(100);
         nombre.setPrefHeight(100);
@@ -471,10 +497,25 @@ public class VendedorViewController {
         infoText.getChildren().addAll(nombre, precio, categoria, estado, fecha);
         infoText.setSpacing(15);
 
-        buttonContent.getChildren().addAll(likeButton, commentButton, buyButton);
+        buttonContent.getChildren().addAll(cantidadLikes,likeButton, commentButton, buyButton);
         infoContent.getChildren().addAll(imageView, infoText);
 
         itemPane.getChildren().addAll( infoContent, buttonContent);
+
+        likeButton.setOnMouseClicked(event -> {
+            darLike(likeButton, cantidadLikes);
+            likeButton.setDisable(true);
+        });
+
+        commentButton.setOnMouseClicked(event -> {
+            try {
+                obtenerIdProducto(commentButton);
+                modelFactoryController.getMarketplace().setProductoSeleccionado(idProducto);
+                abrirVentanaComentarios();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         // Evento cuando el mouse entra en el botón
         likeButton.setOnMouseEntered(event -> {
             likeButton.setScaleX(1.2); // Aumentar el tamaño horizontalmente
@@ -515,16 +556,53 @@ public class VendedorViewController {
         return itemPane;
     }
 
+    private void abrirVentanaComentarios() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/comment-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        Stage stage = new Stage();
+        stage.setTitle("LISTA DE COMENTARIOS");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    private void darLike(Button likeButton, Label cantidadLikes) {
+        HBox buttonContent = (HBox) likeButton.getParent();
+        VBox parentContent = (VBox) buttonContent.getParent();
+        HBox infoContent = (HBox) parentContent.getChildren().get(0);
+        VBox infoText = (VBox) infoContent.getChildren().get(1);
+
+        Label id = (Label) infoText.getChildren().get(0);
+        idProducto = id.getText();
+
+        Producto productoSeleccionado = producCargados.stream().filter(producto -> producto.getIdProducto().equals(id.getText())).findFirst().orElse(null);
+
+        if(productoSeleccionado != null){
+            productoSeleccionado.setLikes(1);
+        }
+        cantidadLikes.setText(String.valueOf(productoSeleccionado.getLikes()));
+    }
+
     private void refreshTab() throws IOException {
         producCargados = Persistencia.cargarProductos();
-        int cantidadProductos = modelFactoryController.obtenerProductos().size();
+        int cantidadProductos = producCargados.size();
 
         for (int i = 0; i < cantidadProductos; i++) {
             Producto producto = producCargados.get(i);
             String infoProducto = producto.toString();
-            addNewItem(infoProducto);
+            addNewItem(infoProducto, producCargados.get(i));
         }
 
         scrollPane.setContent(contentBox);
+    }
+
+    public void obtenerIdProducto(Button boton){
+        HBox buttonContent = (HBox) boton.getParent();
+        VBox parentContent = (VBox) buttonContent.getParent();
+        HBox infoContent = (HBox) parentContent.getChildren().get(0);
+        VBox infoText = (VBox) infoContent.getChildren().get(1);
+
+        Label id = (Label) infoText.getChildren().get(0);
+        idProducto = id.getText();
     }
 }
