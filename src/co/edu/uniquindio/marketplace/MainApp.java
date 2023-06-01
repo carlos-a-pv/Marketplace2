@@ -1,5 +1,6 @@
 package co.edu.uniquindio.marketplace;
 
+import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,8 @@ public class MainApp extends Application {
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
+
+
     }
 
     public static void main(String[] args) {

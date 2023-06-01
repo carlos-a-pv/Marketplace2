@@ -3,10 +3,12 @@ package co.edu.uniquindio.marketplace.model;
 import co.edu.uniquindio.marketplace.persistence.ArchivoUtil;
 import co.edu.uniquindio.marketplace.persistence.Persistencia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Producto {
+public class Producto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private  String nombre;
     private String nombreVendedor;
     private String precio;
@@ -18,6 +20,8 @@ public class Producto {
     private int likes;
     private String fechaPublicacion;
 
+
+    public Producto(){}
     public Producto(String nombre, String precio, Categoria categoria ){
         cargarFechaSistema();
         this.nombre = nombre;
@@ -28,6 +32,7 @@ public class Producto {
         this.fechaPublicacion = cargarFechaSistema();
         this.comentarios = new ArrayList<>();
         this.comentarios.add(new Comentario("hoy", "yo", "hola, esto es una prueba"));
+        this.likes = 0;
     }
 
     private String generarId() {
@@ -157,4 +162,11 @@ public class Producto {
         //		horaFechaSistema = hora+"-"+minuto;
     }
 
+    public void setEstado(Disponibilidad estado) {
+        this.estado = estado;
+    }
+
+    public void setComentarios(ArrayList<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 }

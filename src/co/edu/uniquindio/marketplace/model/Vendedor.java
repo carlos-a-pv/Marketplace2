@@ -1,20 +1,27 @@
 package co.edu.uniquindio.marketplace.model;
 
 import javax.sound.sampled.Port;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-public class Vendedor extends Empleado{
+public class Vendedor extends Empleado implements Serializable {
+    private static final long serialVersionUID = 1L;
     private  String contra;
+    private String userName;
     private String nombre;
     private String apellido;
     private String cedula;
     private String direccion;
-    private String descripcion;
+    private String descripcion = "";
     private ArrayList<Producto> productos;
     private ArrayList<Solicitud> solicitudesEnviadas;
     private ArrayList<Solicitud> solicitudesRecibidas;
     private ArrayList<Vendedor> vendedoresAliados;
 
+    public Vendedor(){
+        super(new Usuario("",""));
+    }
     public Vendedor(String nombre, String apellido, String cedula, String direccion, String user, String password){
          super(new Usuario(user, password));
          Usuario userNew = new Usuario(user, password);
@@ -23,7 +30,7 @@ public class Vendedor extends Empleado{
          this.cedula = cedula;
          this.direccion = direccion;
          this.contra = userNew.getPassword();
-         this.descripcion = "";
+         this.userName = userNew.getNombre();
          this.solicitudesEnviadas = new ArrayList<>();
          this.solicitudesRecibidas = new ArrayList<>();
          this.productos = new ArrayList<>();
@@ -120,5 +127,32 @@ public class Vendedor extends Empleado{
 
     public void setProductos(ArrayList<Producto> productos) {
         this.productos = productos;
+    }
+
+    public void setSolicitudesEnviadas(ArrayList<Solicitud> solicitudesEnviadas) {
+        this.solicitudesEnviadas = solicitudesEnviadas;
+    }
+
+    public void setSolicitudesRecibidas(ArrayList<Solicitud> solicitudesRecibidas) {
+        this.solicitudesRecibidas = solicitudesRecibidas;
+    }
+
+    public void setVendedoresAliados(ArrayList<Vendedor> vendedoresAliados) {
+        this.vendedoresAliados = vendedoresAliados;
+    }
+
+
+    public String getUsername() {
+        return userName;
+    }
+
+    public void setUserName(String user) {
+        this.userName = user;
+    }
+
+    public void eliminarAmigo(Vendedor amigoSeleccionado) {
+        vendedoresAliados = (ArrayList<Vendedor>) vendedoresAliados.stream().filter(vendedor -> !vendedor.equals(amigoSeleccionado)).collect(Collectors.toList());
+        ArrayList<Vendedor> p = (ArrayList<Vendedor>) amigoSeleccionado.getVendedoresAliados().stream().filter(vendedor -> !vendedor.equals(amigoSeleccionado)).collect(Collectors.toList());
+        amigoSeleccionado.setVendedoresAliados(p);
     }
 }

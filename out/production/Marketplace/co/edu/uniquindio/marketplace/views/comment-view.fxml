@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.marketplace.controllers.CommentViewController">
    <children>
       <Label layoutX="191.0" layoutY="14.0" text="Lista De Comnetarios" textFill="#0037ff">
@@ -22,7 +21,7 @@
             <TableColumn fx:id="colComentario" prefWidth="386.0" text="Comentario" />
         </columns>
       </TableView>
-      <Button fx:id="btnComentar" layoutX="249.0" layoutY="341.0" mnemonicParsing="false" text="Comentar">
+      <Button fx:id="btnComentar" layoutX="249.0" layoutY="341.0" mnemonicParsing="false" onAction="#onComentarClick" text="Comentar">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

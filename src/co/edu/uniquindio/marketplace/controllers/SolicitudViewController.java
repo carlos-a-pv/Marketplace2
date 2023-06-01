@@ -54,6 +54,8 @@ public class SolicitudViewController {
     @FXML
     private Button btnEliminarAmigo;
 
+    Vendedor amigoSeleccionado;
+
     @FXML
     void initialize( ){
         modelFactoryController = modelFactoryController.getInstance();
@@ -88,6 +90,10 @@ public class SolicitudViewController {
 
         tbRecibidas.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newValue) -> {
             solicitudSeleccionada = (Solicitud) newValue;
+        });
+
+        tbVendedoresAliados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+            amigoSeleccionado = (Vendedor) newValue;
         });
     }
     public void onAceptarSolicitudClick(ActionEvent actionEvent) {
@@ -126,5 +132,15 @@ public class SolicitudViewController {
     public ObservableList<Vendedor> getListaVendedoresAliadosData() {
         listaVendedoresAliadosData.addAll(modelFactoryController.getVendedorLogeado().getVendedoresAliados());
         return listaVendedoresAliadosData;
+    }
+
+    public void onEliminarAmigoClick(ActionEvent actionEvent) {
+
+        if(amigoSeleccionado != null){
+            modelFactoryController.getVendedorLogeado().eliminarAmigo(amigoSeleccionado);
+            tbVendedoresAliados.getItems().clear();
+            tbVendedoresAliados.setItems(getListaVendedoresAliadosData());
+            tbVendedoresAliados.refresh();
+        }
     }
 }

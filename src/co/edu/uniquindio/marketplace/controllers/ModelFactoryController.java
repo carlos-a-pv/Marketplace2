@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ModelFactoryController implements IModelFactoryService {
 
     static Marketplace marketplace;
-    static Vendedor vendedorLogeado ;
+    static Vendedor vendedorLogeado;
     static Producto productoSeleccionado;
     static Vendedor vendedorSeleccionado;
 
@@ -40,8 +40,8 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
         //2. Cargar los datos de los archivos
-		cargarVendedoresDesdeArchivos();
-        cargarProdcutoDesdeArchivos();
+		 //cargarVendedoresDesdeArchivos();
+         //cargarProdcutoDesdeArchivos();
 
 
         //3. Guardar y Cargar el recurso serializable binario
@@ -50,17 +50,27 @@ public class ModelFactoryController implements IModelFactoryService {
 
 
         //4. Guardar y Cargar el recurso serializable XML
-//		guardarResourceXML();
-//		cargarResourceXML();
+		cargarResourceXML();
+		guardarResourceXML();
 
         //Siempre se debe verificar si la raiz del recurso es null
 
         if(marketplace == null){
+            System.out.println("NO LEYÓ EL ARCHIVO XML !!!!");
             inicializarDatos();
             //guardarResourceXML();
         }
 
-        inicializarSalvarDatos();
+        //inicializarSalvarDatos();
+    }
+    private void cargarResourceXML() {
+        marketplace = Persistencia.cargarRecursoBancoXML();
+
+    }
+
+    public void guardarResourceXML() {
+        Persistencia.guardarRecursoBancoXML(marketplace);
+
     }
 
     public void cargarProdcutoDesdeArchivos() {
@@ -76,6 +86,7 @@ public class ModelFactoryController implements IModelFactoryService {
         //inicializarDatos();
         try {
             Persistencia.guardarVendedores(getMarketplace().getVendedores());
+            Persistencia.guardarRecursoBancoXML(getMarketplace());
             if(vendedorLogeado != null){
                 Persistencia.guardarProductos(vendedorLogeado.getProductos(), vendedorLogeado);
             }
@@ -86,7 +97,7 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     private void cargarVendedoresDesdeArchivos() {
-        this.marketplace = new Marketplace();
+        this.marketplace = new Marketplace("");
         try {
             ArrayList<Vendedor> listaVendedores;
             listaVendedores = Persistencia.cargarVendedores();
@@ -104,7 +115,7 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     private void inicializarDatos() {
-        this.marketplace = new Marketplace();
+        this.marketplace = new Marketplace("");
         this.marketplace.getVendedores().add(new Vendedor("carlos", "perez", "1004827192","calle","user","123"));
         this.marketplace.getVendedores().get(0).getProductos().add(new Producto("carro","100", Categoria.VEHICULOS));
         this.marketplace.getVendedores().add(new Vendedor("katherine", "verano", "123123","carrera","user2","1223"));
@@ -169,6 +180,10 @@ public class ModelFactoryController implements IModelFactoryService {
     public ArrayList<Vendedor> obtenerVendedores() {
         return getMarketplace().obtenerVendedores();
     }
+    @Override
+    public  ArrayList<Producto> obtenerProductos(){
+        return getMarketplace().obtenerProductos();
+    }
 
     public Empleado autenticar(String user, String password) {
         Empleado empleado = null;
@@ -187,9 +202,7 @@ public class ModelFactoryController implements IModelFactoryService {
         return empleado;
     }
 
-    public  ArrayList<Producto> obtenerProductos() throws IOException {
-        return Persistencia.cargarProductos();
-    }
+
     @Override
     public Producto crearProducto(String nombre, String precio, Categoria categoria) {
         Producto productoCreado =  vendedorLogeado.crearProducto(nombre, precio, categoria);
@@ -212,7 +225,10 @@ public class ModelFactoryController implements IModelFactoryService {
         return false;
     }
 
-
+    @Override
+    public boolean eliminarProducto(String idProducto){
+        return getMarketplace().eliminarProducto(idProducto, getVendedorLogeado());
+    }
 
     public void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
 

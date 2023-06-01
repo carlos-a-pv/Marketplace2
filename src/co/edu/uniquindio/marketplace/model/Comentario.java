@@ -1,9 +1,14 @@
 package co.edu.uniquindio.marketplace.model;
 
-public class Comentario {
+import java.io.Serializable;
+
+public class Comentario implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String fecha;
     private String autor;
     private String comentario;
+
+    public Comentario(){}
 
     public Comentario(String fecha, String autor, String comentario){
         this.fecha = fecha;

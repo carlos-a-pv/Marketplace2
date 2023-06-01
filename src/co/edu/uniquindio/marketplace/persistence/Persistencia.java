@@ -21,7 +21,7 @@ public class Persistencia {
     public static final String RUTA_ARCHIVO_LOG = "C://td//persistencia//log//BancoLog.txt";
     public static final String RUTA_ARCHIVO_PRODUCTO ="C://td//Persistencia//Archivos/archivoProductos.txt";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_BINARIO = "C://td//persistencia//model.dat";
-    //public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
+    public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
 
 
 
@@ -206,31 +206,25 @@ public class Persistencia {
         }
     }*/
 
-    /*
+
     public static Marketplace cargarRecursoBancoXML() {
-
         Marketplace marketplace = null;
-
         try {
-            marketplace = (Marketplace)ArchivoUtil.cargarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML);
+            marketplace = (Marketplace) ArchivoUtil.cargarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return marketplace;
+    }
 
-    }*/
-
-
-    /*
     public static void guardarRecursoBancoXML(Marketplace marketplace) {
-
         try {
             ArchivoUtil.salvarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML, marketplace);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }*/
+    }
 }
 

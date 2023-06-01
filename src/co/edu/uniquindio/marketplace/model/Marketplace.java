@@ -3,20 +3,24 @@ package co.edu.uniquindio.marketplace.model;
 import co.edu.uniquindio.marketplace.exceptions.InicioSesionException;
 import co.edu.uniquindio.marketplace.exceptions.VendedorException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Marketplace {
-    private Administrador admin;
-    private Vendedor vendedorSeleccionado;
-    private Producto productoSeleccionado;
-    private ArrayList<Vendedor> vendedores;
-    private ArrayList<Producto> productos;
+public class Marketplace implements Serializable {
 
-    public Marketplace(){
-        vendedores = new ArrayList<>();
-        admin = new Administrador("admin", "admin123");
-        productos = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
+    private Administrador admin = new Administrador("admin", "admin123");
+    private Vendedor vendedorSeleccionado = null;
+    private Producto productoSeleccionado = new Producto();
+    private ArrayList<Vendedor> vendedores = new ArrayList<>();
+    private ArrayList<Producto> productos = new ArrayList<>();
+
+    public Marketplace(){}
+
+    public Marketplace(String nombre){
+
     }
     public Vendedor crearEmpleado(String nombre, String apellido, String cedula, String direccion, String user, String password) throws VendedorException {
         Vendedor nuevoVendedor = null;
@@ -131,11 +135,58 @@ public class Marketplace {
     }
 
     public void setProductoSeleccionado(String idProducto) {
-        this.productoSeleccionado  = productos.stream().filter(producto -> producto.getIdProducto().equals(idProducto)).findFirst().orElse(null);
-
+        this.productoSeleccionado  = obtenerProductos().stream().filter(producto -> producto.getIdProducto().equals(idProducto)).findFirst().orElse(null);
+        System.out.println(productoSeleccionado);
     }
 
+    public ArrayList<Producto> obtenerProductos(){
+        return llenarListaProducto();
+    }
     public ArrayList<Producto> getProductos() {
         return productos;
+    }
+
+    public Administrador getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Administrador admin) {
+        this.admin = admin;
+    }
+
+    public void setProductoSeleccionado(Producto productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
+    }
+
+    public void setVendedores(ArrayList<Vendedor> vendedores) {
+        this.vendedores = vendedores;
+    }
+
+    public void setProductos(ArrayList<Producto> productos) {
+        this.productos = productos;
+    }
+
+    private ArrayList<Producto> llenarListaProducto(){
+       ArrayList<Producto> productosCargados = new ArrayList<>();
+        this.vendedores.forEach(vendedor -> {
+           productosCargados.addAll(vendedor.getProductos());
+       });
+        this.productos = productosCargados;
+       return productosCargados;
+    }
+
+    public boolean eliminarProducto(String idProducto, Vendedor vendedorLogeado) {
+        int cantidadProductos = llenarListaProducto().size();
+
+        for (int i = 0; i < cantidadProductos; i++) {
+            if(productos.get(i).getIdProducto().equals(idProducto)){
+                System.out.println("SE HA ENCONTRADO DOS PRODUCTOS CON IGUAL ID");
+                llenarListaProducto().remove(i);
+                ArrayList<Producto> productorFiltrados = (ArrayList<Producto>) vendedorLogeado.getProductos().stream().filter(producto -> !producto.getIdProducto().equals(idProducto)).collect(Collectors.toList());
+                vendedorLogeado.setProductos(productorFiltrados);
+                return true;
+            }
+        }
+        return false;
     }
 }

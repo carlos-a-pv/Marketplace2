@@ -28,4 +28,8 @@ public class CrudProductoViewController {
     public Producto crearProducto(String nombre, String precio, Categoria categoria ) {
         return modelFactoryController.crearProducto(nombre, precio, categoria);
     }
+
+    public boolean eliminarProducto(String idProducto){
+        return modelFactoryController.eliminarProducto(idProducto);
+    }
 }

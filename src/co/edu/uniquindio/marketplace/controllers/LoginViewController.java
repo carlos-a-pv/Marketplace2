@@ -4,6 +4,7 @@ import co.edu.uniquindio.marketplace.MainApp;
 import co.edu.uniquindio.marketplace.model.Administrador;
 import co.edu.uniquindio.marketplace.model.Empleado;
 import co.edu.uniquindio.marketplace.model.Vendedor;
+import co.edu.uniquindio.marketplace.persistence.Persistencia;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,7 +60,7 @@ public class LoginViewController {
                 modelFactoryController.registrarAccionesSistema("Inicio de sesión del usuario: "+usuario, 1, "inicioSesión");
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/co/edu/uniquindio/marketplace/views/principal-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
-            Stage stage = new Stage();
+                Stage stage = new Stage();
                 stage.setTitle("VENDEDOR");
                 stage.setScene(scene);
                 //stage.setFullScreen(true);

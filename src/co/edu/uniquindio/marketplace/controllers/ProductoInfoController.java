@@ -2,19 +2,24 @@ package co.edu.uniquindio.marketplace.controllers;
 
 import co.edu.uniquindio.marketplace.model.Producto;
 import co.edu.uniquindio.marketplace.model.Vendedor;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class ProductoInfoController {
 
     ModelFactoryController modelFactoryController;
-    CrudVendedorViewController crudVendedorViewController;
+    CrudProductoViewController crudProductoViewController;
     Producto productoSeleccionado;
     Vendedor vendedorSeleccionado;
     Vendedor vendedorLogeado;
@@ -30,18 +35,12 @@ public class ProductoInfoController {
     @FXML
     private TextField tfDisponibility;
     @FXML
-    private Button btnLike;
-    @FXML
-    private Button btnComment;
-    @FXML
-    private Button btnBuy;
-    @FXML
     private Button btnRemove;
 
     @FXML
     void initialize(){
         modelFactoryController = ModelFactoryController.getInstance();
-        crudVendedorViewController = new CrudVendedorViewController(modelFactoryController);
+        crudProductoViewController = new CrudProductoViewController(modelFactoryController);
         productoSeleccionado = modelFactoryController.getMarketplace().getProductoSeleccionado();
         vendedorSeleccionado = modelFactoryController.getVendedorSeleccionado();
         vendedorLogeado = modelFactoryController.getVendedorLogeado();
@@ -56,20 +55,40 @@ public class ProductoInfoController {
         view.setFitWidth(200);
         view.setPreserveRatio(true);
         contentImgProduct.getChildren().add(view);
+    }
 
-        if(vendedorSeleccionado == null){
-            //no se ha cambiado de pestañas.
-            btnLike.setDisable(true);
-            btnBuy.setDisable(true);
-            btnComment.setDisable(true);
-        }else{
-            if(vendedorSeleccionado.equals(vendedorLogeado)){
-                btnLike.setDisable(true);
-                btnBuy.setDisable(true);
-                btnComment.setDisable(true);
+
+    public void onEliminarClick(ActionEvent actionEvent) {
+        if(mostrarMensajeConfirmacion("¿Estas seguro de elmininar el producto?") == true){
+            if(crudProductoViewController.eliminarProducto(productoSeleccionado.getIdProducto())){
+                mostrarMensaje("INFO","Eliminación","se ha eliminado el producto", Alert.AlertType.INFORMATION);
+                Stage stage = new Stage();
+                stage.initOwner(btnRemove.getScene().getWindow());
+                btnRemove.getScene().getWindow().hide();
             }else{
-                btnRemove.setDisable(true);
+
             }
+        }
+    }
+    public void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
+        Alert aler = new Alert(alertType);
+        aler.setTitle(titulo);
+        aler.setHeaderText(header);
+        aler.setContentText(contenido);
+        aler.showAndWait();
+    }
+    private boolean mostrarMensajeConfirmacion(String mensaje) {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Confirmación");
+        alert.setContentText(mensaje);
+        Optional<ButtonType> action = alert.showAndWait();
+
+        if (((Optional<?>) action).get() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

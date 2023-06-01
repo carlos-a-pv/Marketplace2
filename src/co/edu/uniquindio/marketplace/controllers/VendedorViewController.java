@@ -63,24 +63,23 @@ public class VendedorViewController {
         //INICIAR EL TAB DEL MARKETPLACE
         //contentBox.setPadding(new Insets(0, 0, 0, 0));
         contentBox.setSpacing(50);
-        producCargados = modelFactoryController.getMarketplace().getProductos();
 
+        producCargados = modelFactoryController.obtenerProductos();
         if(producCargados != null){
-            int cantidadProductos = modelFactoryController.obtenerProductos().size();
-
-            for (int i = 0; i < cantidadProductos; i++) {
-                Producto producto = producCargados.get(i);
-                String infoProducto = producto.toString();
-                addNewItem(infoProducto, producCargados.get(i));
+            int cantidadProductos = producCargados.size();
+            System.out.println(cantidadProductos);
+            if(cantidadProductos != 0){
+                for (int i = 0; i < cantidadProductos; i++) {
+                    Producto producto = producCargados.get(i);
+                    String infoProducto = producto.toString();
+                    addNewItem(infoProducto, producCargados.get(i));
+                }
             }
         }
 
+
         int cantidadVendedores = modelFactoryController.obtenerVendedores().size();
         for (int i=0; i<cantidadVendedores; i++){
-
-
-            //modelFactoryController.getMarketplace().getProductos().forEach(producto -> System.out.println(producto.getNombre()));
-
             //Creaccion de componentes
             Tab tab = new Tab("Vendedor:"+(i+1));
             tab.setId(String.valueOf(i+1));
@@ -89,11 +88,12 @@ public class VendedorViewController {
             ImageView fotoUsuario = new ImageView();
             Image image = new Image(getClass().getResourceAsStream("/resources/usuario.png"));
             Button btnCambiarImagen = new Button("Cambiar imagen");
-            Button btnPublicar = new Button("publicar");
+            Button btnPublicar = new Button("PUBLICAR");
             Button btnEditar = new Button();
             Button btnVolver = new Button("");
             Button btnAddVendedor = new Button();
             Button btnSolicitud = new Button();
+            Button btnChat = new Button();
             TableView<Producto> productos = new TableView<>();
             TableColumn<Producto, String> colNombre = new TableColumn<>("Nombre");
             TableColumn<Producto, String> colPrecio = new TableColumn<>("Precio");
@@ -105,20 +105,20 @@ public class VendedorViewController {
             VBox vBox = new VBox(10);
             vBox.getChildren().addAll(nombre, fotoUsuario, btnCambiarImagen);
 
-            HBox hbox = new HBox(btnVolver, vBox,descripcion2,btnEditar, btnSolicitud);
+            HBox hbox = new HBox(btnVolver, vBox,descripcion2,btnEditar, btnSolicitud, btnChat);
 
 
             //Estilos
-            content.setPadding(new Insets(20,20,20,20));
+            content.setPadding(new Insets(10,20,10,20));
             content.setAlignment(Pos.CENTER);
             fotoUsuario.setImage(image);
             //fotoUsuario.setFitHeight(100);
             //fotoUsuario.setFitWidth(100);
-            content.setSpacing(30);
+            content.setSpacing(15);
             hbox.setSpacing(30);
             btnCambiarImagen.setAlignment(Pos.BOTTOM_LEFT);
             descripcion2.setPrefWidth(400);
-            descripcion2.setPrefHeight(500);
+            descripcion2.setPrefHeight(350);
             descripcion2.setDisable(true);
 
             btnAddVendedor.setPrefWidth(50);
@@ -128,6 +128,8 @@ public class VendedorViewController {
             nombre.setFont(new Font(25));
             nombre.setAlignment(Pos.CENTER);
             nombre.setText(nombre.getText().toUpperCase());
+
+            hbox.setPrefHeight(350);
             //content.setPrefHeight(700);
 
             contentAll.setTopAnchor(tabPane, 0.0);
@@ -135,16 +137,21 @@ public class VendedorViewController {
             contentAll.setLeftAnchor(tabPane, 0.0);
             contentAll.setRightAnchor(tabPane, 0.0);
             //VBox.setMargin(button, new Insets(10));
-            vBox.setSpacing(50);
+            vBox.setSpacing(20);
             vBox.setAlignment(Pos.CENTER);
+
+            btnPublicar.setStyle("-fx-min-width: 45px; -fx-min-height: 45px;");
+            btnCambiarImagen.setStyle("-fx-min-width: 30px; -fx-min-height: 30;");
+            btnPublicar.setFont(new Font(15));
+            btnCambiarImagen.setFont(new Font(15));
+
+            productos.setPrefHeight(350);
             //Setting
-            llenarTabla(modelFactoryController.obtenerVendedores().get(i));
 
             if(modelFactoryController.getVendedorLogeado().equals(modelFactoryController.obtenerVendedores().get(i))){
-                if(getListaProductoData(modelFactoryController.obtenerVendedores().get(i)) != null){
-                    productos.setItems(listaProductosData);
-                }
+                productos.setItems(getListaProductoData(modelFactoryController.obtenerVendedores().get(i)));
             }
+
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
             colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
             colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
@@ -155,27 +162,50 @@ public class VendedorViewController {
 
             Image img = new Image("/resources/edit.png");
             ImageView view = new ImageView(img);
-            view.setFitHeight(20);
+            view.setFitHeight(30);
+            view.setFitWidth(30);
             view.setPreserveRatio(true);
             btnEditar.setGraphic(view);
+            btnEditar.setPrefHeight(30);
+            btnEditar.setPrefWidth(30);
 
             Image img1 = new Image("/resources/cerrar-sesion.png");
             ImageView view1 = new ImageView(img1);
-            view1.setFitHeight(20);
+            view1.setFitHeight(30);
+            view1.setFitWidth(30);
             view1.setPreserveRatio(true);
             btnVolver.setGraphic(view1);
+            btnVolver.setPrefWidth(30);
+            btnVolver.setPrefHeight(30);
 
-            Image img3 = new Image("/resources/amigos.png");
+            Image img3 = new Image("/resources/solicitud-de-amistad.png");
             ImageView view3 = new ImageView(img3);
-            view3.setFitHeight(20);
+            view3.setFitHeight(30);
+            view3.setFitWidth(30);
             view3.setPreserveRatio(true);
             btnSolicitud.setGraphic(view3);
+            btnSolicitud.setPrefHeight(30);
+            btnSolicitud.setPrefWidth(30);
+
 
             Image img4 = new Image("/resources/agregar-usuario.png");
             ImageView view4 = new ImageView(img4);
-            view4.setFitHeight(20);
+            view4.setFitHeight(30);
+            view4.setFitWidth(30);
             view4.setPreserveRatio(true);
             btnAddVendedor.setGraphic(view4);
+            btnAddVendedor.setPrefWidth(30);
+            btnAddVendedor.setPrefHeight(30);
+
+
+            Image img5 = new Image("/resources/chat.png");
+            ImageView view5 = new ImageView(img5);
+            view5.setFitHeight(30);
+            view5.setFitWidth(30);
+            view5.setPreserveRatio(true);
+            btnChat.setGraphic(view5);
+            btnChat.setPrefHeight(30);
+            btnChat.setPrefWidth(30);
 
             //Add de componentes
             content.getChildren().addAll(hbox,btnAddVendedor, productos, btnPublicar);
@@ -199,6 +229,7 @@ public class VendedorViewController {
             btnVolver.setOnMouseClicked((event -> {
                 try {
                     volverAtras(btnVolver);
+                    modelFactoryController.guardarResourceXML();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -263,6 +294,14 @@ public class VendedorViewController {
                 }
             }));
 
+            btnChat.setOnMouseClicked(event -> {
+                try {
+                    mostrarChat();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
             if(!modelFactoryController.obtenerVendedores().get(i).equals(vendedorLogeado)){
                 btnCambiarImagen.setDisable(true);
                 btnEditar.setDisable(true);
@@ -270,6 +309,7 @@ public class VendedorViewController {
                 productos.setDisable(true);
                 btnSolicitud.setDisable(true);
                 btnVolver.setDisable(true);
+                btnChat.setDisable(true);
 
             }else{
                 btnAddVendedor.setVisible(false);
@@ -278,6 +318,10 @@ public class VendedorViewController {
             productos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
                 try {
                     abrirVentanaInfo(newValue);
+                    productos.getItems().clear();
+                    productos.setItems(getListaProductoData(modelFactoryController.getVendedorLogeado()));
+                    productos.refresh();
+                    refreshTab();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -304,11 +348,13 @@ public class VendedorViewController {
 
     }
 
+
+
     private void llenarTabla(Vendedor vendedor) throws IOException {
-        ArrayList<Producto> productosCargados = modelFactoryController.getMarketplace().getProductos();
-        if(productosCargados != null){
+        ArrayList<Producto> productosCargados = modelFactoryController.obtenerProductos();
+        /*if(productosCargados != null){
             productosVendedor = (ArrayList<Producto>) productosCargados.stream().filter(producto -> producto.getIdVendedor().equals(vendedor.getCedula())).collect(Collectors.toList());
-        }
+        }*/
         vendedor.setProductos(productosVendedor);
     }
 
@@ -340,7 +386,7 @@ public class VendedorViewController {
     }
 
     private void abrirVentanaInfo(Producto x) throws IOException {
-        modelFactoryController.getMarketplace().setProductoSeleccionado(x.getIdProducto());
+        modelFactoryController.getMarketplace().setProductoSeleccionado(x);
         if (x != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/producto-info.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 350);
@@ -349,7 +395,17 @@ public class VendedorViewController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
+            refreshTab();
         }
+    }
+    private void mostrarChat() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/chat-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 770, 520);
+        Stage stage = new Stage();
+        stage.setTitle("CHAT");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     private void publicarProducto() throws IOException {
@@ -558,7 +614,7 @@ public class VendedorViewController {
 
     private void abrirVentanaComentarios() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/marketplace/views/comment-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         Stage stage = new Stage();
         stage.setTitle("LISTA DE COMENTARIOS");
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -584,7 +640,8 @@ public class VendedorViewController {
     }
 
     private void refreshTab() throws IOException {
-        producCargados = Persistencia.cargarProductos();
+        contentBox.getChildren().clear();
+        producCargados = modelFactoryController.obtenerProductos();
         int cantidadProductos = producCargados.size();
 
         for (int i = 0; i < cantidadProductos; i++) {
