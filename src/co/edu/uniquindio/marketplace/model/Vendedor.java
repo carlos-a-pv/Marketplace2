@@ -1,8 +1,11 @@
 package co.edu.uniquindio.marketplace.model;
 
+import co.edu.uniquindio.marketplace.persistence.ArchivoUtil;
+
 import javax.sound.sampled.Port;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.stream.Collectors;
 
 public class Vendedor extends Empleado implements Serializable {
@@ -18,6 +21,7 @@ public class Vendedor extends Empleado implements Serializable {
     private ArrayList<Solicitud> solicitudesEnviadas;
     private ArrayList<Solicitud> solicitudesRecibidas;
     private ArrayList<Vendedor> vendedoresAliados;
+    private ArrayList<Chat> chats = new ArrayList<>();
 
     public Vendedor(){
         super(new Usuario("",""));
@@ -116,6 +120,9 @@ public class Vendedor extends Empleado implements Serializable {
         Solicitud solicitudEncontrada = getSolicitudesRecibidas().stream().filter((soli)-> soli.equals(solicitud)).findFirst().orElse(null);
         if(solicitudEncontrada != null){
             solicitudEncontrada.setEstado(Estado.ACEPTADA);
+            Chat chat = new Chat();
+            //chat.setEmisor();
+            //chat.setReceptor();
             return solicitudEncontrada;
         }
         return null;
@@ -154,5 +161,64 @@ public class Vendedor extends Empleado implements Serializable {
         vendedoresAliados = (ArrayList<Vendedor>) vendedoresAliados.stream().filter(vendedor -> !vendedor.equals(amigoSeleccionado)).collect(Collectors.toList());
         ArrayList<Vendedor> p = (ArrayList<Vendedor>) amigoSeleccionado.getVendedoresAliados().stream().filter(vendedor -> !vendedor.equals(amigoSeleccionado)).collect(Collectors.toList());
         amigoSeleccionado.setVendedoresAliados(p);
+    }
+
+    public Mensaje enviarMensaje(String mensaje, String cedula, Vendedor vendedorLogeado){
+        Chat chatEncontrado = new Chat();
+        Mensaje mensajeNuevo = new Mensaje();
+        Vendedor receptor = vendedoresAliados.stream().filter(vendedor -> vendedor.getCedula().equals(cedula)).findFirst().orElse(null);
+        if(receptor != null){
+            chatEncontrado = vendedorLogeado.getChats().stream().filter(chat -> chat.getVendedor1().equals(vendedorLogeado) && chat.getVendedor2().getCedula().equals(cedula)).findFirst().orElse(null);
+            mensajeNuevo.setContenido(mensaje);
+            mensajeNuevo.setBandera(true);
+            mensajeNuevo.setFecha(cargarFechaSistema());
+            chatEncontrado.getMensajes().add(mensajeNuevo);
+
+        }
+        return mensajeNuevo;
+    }
+
+    public ArrayList<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(ArrayList<Chat> chats) {
+        this.chats = chats;
+    }
+
+    private String cargarFechaSistema() {
+
+        String diaN = "";
+        String mesN = "";
+        String añoN = "";
+
+        Calendar cal1 = Calendar.getInstance();
+
+        int  dia = cal1.get(Calendar.DATE);
+        int mes = cal1.get(Calendar.MONTH)+1;
+        int año = cal1.get(Calendar.YEAR);
+        int hora = cal1.get(Calendar.HOUR);
+        int minuto = cal1.get(Calendar.MINUTE);
+
+
+        if(dia < 10){
+            diaN+="0"+dia;
+        }
+        else{
+            diaN+=""+dia;
+        }
+        if(mes < 10){
+            mesN+="0"+mes;
+        }
+        else{
+            mesN+=""+mes;
+        }
+
+        return hora+":"+minuto+" "+año+"-"+mesN+"-"+diaN;
+
+    }
+
+    public Chat encontrarChat(String cedula, Vendedor vendedorLogeado) {
+        return vendedorLogeado.getChats().stream().filter(chat -> chat.getVendedor1().equals(vendedorLogeado) && chat.getVendedor2().getCedula().equals(cedula)).findFirst().orElse(null);
     }
 }

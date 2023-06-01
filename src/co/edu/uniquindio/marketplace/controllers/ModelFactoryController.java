@@ -12,14 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ModelFactoryController implements IModelFactoryService {
+public class ModelFactoryController implements IModelFactoryService, Runnable {
 
     static Marketplace marketplace;
     static Vendedor vendedorLogeado;
     static Producto productoSeleccionado;
     static Vendedor vendedorSeleccionado;
 
-
+    Thread hiloGuardarXML;
 
 
     //------------------------------  Singleton ------------------------------------------------
@@ -69,7 +69,8 @@ public class ModelFactoryController implements IModelFactoryService {
     }
 
     public void guardarResourceXML() {
-        Persistencia.guardarRecursoBancoXML(marketplace);
+        hiloGuardarXML = new Thread();
+        hiloGuardarXML.start();
 
     }
 
@@ -230,6 +231,8 @@ public class ModelFactoryController implements IModelFactoryService {
         return getMarketplace().eliminarProducto(idProducto, getVendedorLogeado());
     }
 
+
+
     public void mostrarMensaje(String titulo, String header, String contenido, Alert.AlertType alertType) {
 
         Alert aler = new Alert(alertType);
@@ -251,6 +254,13 @@ public class ModelFactoryController implements IModelFactoryService {
     }
     public static Vendedor getVendedorLogeado() {
         return vendedorLogeado;
+    }
+
+    @Override
+    public void run() {
+        if(Thread.currentThread()==hiloGuardarXML){
+            Persistencia.guardarRecursoBancoXML(marketplace);
+        }
     }
 }
 
