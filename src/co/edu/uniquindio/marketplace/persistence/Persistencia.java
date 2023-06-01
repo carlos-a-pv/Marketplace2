@@ -21,7 +21,7 @@ public class Persistencia {
     public static final String RUTA_ARCHIVO_LOG = "C://td//persistencia//log//BancoLog.txt";
     public static final String RUTA_ARCHIVO_PRODUCTO ="C://td//Persistencia//Archivos/archivoProductos.txt";
     //public static final String RUTA_ARCHIVO_MODELO_BANCO_BINARIO = "C://td//persistencia//model.dat";
-    //public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
+    public static final String RUTA_ARCHIVO_MODELO_BANCO_XML = "C://td//persistencia//model.xml";
 
 
 
@@ -69,7 +69,9 @@ public class Persistencia {
 
         for (Producto producto:listProducto) {
             if(!estaEnArchivo(producto)){
-                contenido+= producto.getNombre()+"@@"+producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"@@"+producto.getIdProducto()+"@@"+vendedorLogeado.getCedula()+"\n";
+                contenido+= producto.getIdProducto()+"@@"+producto.getFechaPublicacion()+"@@"+producto.getNombre()+"@@"
+                        +producto.getPrecio()+"@@"+producto.getCategoria()+"@@"+producto.getEstado()+"@@"
+                        +"@@"+vendedorLogeado.getNombre()+"@@"+vendedorLogeado.getCedula()+"\n";
             }
         }
         ArchivoUtil.guardarArchivo(RUTA_ARCHIVO_PRODUCTO,contenido,true);
@@ -136,12 +138,14 @@ public class Persistencia {
 
             linea = contenido.get(i);
             Producto producto = new Producto("","",null);
-            producto.setNombre(linea.split("@@")[0]);
-            producto.setPrecio(linea.split("@@")[1]);
-            producto.setCategoria(Categoria.valueOf(String.valueOf(linea.split("@@")[2])));
-            producto.setDisponibilidad(Disponibilidad.valueOf(linea.split("@@")[3]));
-            producto.setIdProducto(linea.split("@@")[4]);
-            producto.setIdVendedor(linea.split("@@")[5]);
+            producto.setIdProducto(linea.split("@@")[0]);
+            producto.setFechaPublicacion(linea.split("@@")[1]);
+            producto.setNombre(linea.split("@@")[2]);
+            producto.setPrecio(linea.split("@@")[3]);
+            producto.setCategoria(Categoria.valueOf(String.valueOf(linea.split("@@")[4])));
+            producto.setDisponibilidad(Disponibilidad.valueOf(linea.split("@@")[5]));
+            producto.setNombreVendedor(linea.split("@@")[6]);
+            producto.setIdVendedor(linea.split("@@")[7]);
             productos.add(producto);
          }
         return  productos;
@@ -202,31 +206,25 @@ public class Persistencia {
         }
     }*/
 
-    /*
+
     public static Marketplace cargarRecursoBancoXML() {
-
         Marketplace marketplace = null;
-
         try {
-            marketplace = (Marketplace)ArchivoUtil.cargarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML);
+            marketplace = (Marketplace) ArchivoUtil.cargarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return marketplace;
+    }
 
-    }*/
-
-
-    /*
     public static void guardarRecursoBancoXML(Marketplace marketplace) {
-
         try {
             ArchivoUtil.salvarRecursoSerializadoXML(RUTA_ARCHIVO_MODELO_BANCO_XML, marketplace);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }*/
+    }
 }
 

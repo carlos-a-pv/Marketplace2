@@ -1,6 +1,10 @@
 package co.edu.uniquindio.marketplace.model;
 
-public class Administrador extends Empleado {
+import java.io.Serializable;
+
+public class Administrador extends Empleado implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String user;
     private String password;
 
@@ -8,5 +12,4 @@ public class Administrador extends Empleado {
         super(new Usuario(user, password));
 
     }
-
 }

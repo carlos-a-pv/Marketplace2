@@ -11,7 +11,10 @@ public interface IModelFactoryService {
     public boolean eliminarVendedor(String cedula);
 
     boolean actualizarVendedor(String cedulaActual, String nombre, String apellido, String cedula, String direccion, String user, String password);
-    public ArrayList<Vendedor> obtenerVendedores();
+    ArrayList<Vendedor> obtenerVendedores();
+    ArrayList<Producto> obtenerProductos();
+    boolean eliminarProducto(String idProducto);
+
 
     Producto crearProducto(String nombre, String precio, Categoria categoria);
 

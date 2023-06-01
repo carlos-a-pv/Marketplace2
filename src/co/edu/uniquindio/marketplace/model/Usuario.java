@@ -1,8 +1,13 @@
 package co.edu.uniquindio.marketplace.model;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String nombre;
     private String password;
+
+    public Usuario(){}
 
     public Usuario(String nombre, String password){
         this.nombre = nombre;

@@ -2,11 +2,15 @@ package co.edu.uniquindio.marketplace.model;
 
 import co.edu.uniquindio.marketplace.controllers.SolicitudViewController;
 
-public class Solicitud {
+import java.io.Serializable;
+
+public class Solicitud implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Estado estado;
     private Vendedor emisor;
     private Vendedor receptor;
 
+    public Solicitud(){}
 
     public Solicitud(Vendedor emisor, Vendedor receptor){
         this.emisor = emisor;
@@ -37,4 +41,6 @@ public class Solicitud {
     public void setReceptor(Vendedor receptor) {
         this.receptor = receptor;
     }
+
+
 }

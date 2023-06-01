@@ -49,7 +49,7 @@
                             <TableColumn fx:id="colApellido" prefWidth="75.0" text="Apellido" />
                           </columns>
                         </TableView>
-                        <Button fx:id="btnEliminarAmigo" layoutX="259.0" layoutY="308.0" mnemonicParsing="false" />
+                        <Button fx:id="btnEliminarAmigo" layoutX="259.0" layoutY="308.0" mnemonicParsing="false" onAction="#onEliminarAmigoClick" />
                      </children>
                   </AnchorPane>
               </content>
